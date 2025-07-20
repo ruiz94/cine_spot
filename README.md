@@ -1,6 +1,6 @@
 # 🎬 CineSpot
 
-A modern application to sell Cinema tickets
+A modern application to sell Cinema tickets.
 
 ## 📋 Description
 
