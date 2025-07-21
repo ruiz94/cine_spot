@@ -1,0 +1,18 @@
+{
+  "name": "cine-spot-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node --esm src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "author": "Armando Ruiz",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^24.0.15",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
