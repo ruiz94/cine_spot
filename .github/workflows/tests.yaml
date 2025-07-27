@@ -1,0 +1,42 @@
+name: Run tests on PR or push
+
+on: [pull_request, push]
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs: 
+      frontend: ${{ steps.filter.outputs.frontend }}
+      backend: ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+            backend:
+              - 'backend/**'
+    
+  test-frontend:
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    name: Test Frontend
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install dependencies and run tests
+        run: cd frontend && npm install && npm test
+
+  test-backend:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    name: Test Backend
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install dependencies and run tests
+        run: cd backend && npm install && npm test
