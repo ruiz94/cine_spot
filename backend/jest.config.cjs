@@ -1,6 +1,6 @@
 /**
  * Jest Configuration for CineSpot Backend
- * Optimized for TypeScript + Node.js testing
+ * Optimized for TypeScript + Node.js testing with ES Modules
  */
 
 /** @type {import('jest').Config} */
@@ -23,19 +23,9 @@ const config = {
     "<rootDir>/tests"
   ],
 
-  // File extensions Jest will process
-  moduleFileExtensions: [
-    "ts",
-    "tsx", 
-    "js",
-    "jsx",
-    "json"
-  ],
-
   // Test file patterns
   testMatch: [
-    "**/__tests__/**/*.?([mc])[jt]s?(x)",
-    "**/?(*.)+(spec|test).?([mc])[jt]s?(x)"
+    "**/?(*.)+(spec|test).ts"
   ],
 
   // Transform TypeScript files with ESM support
@@ -46,7 +36,7 @@ const config = {
     }],
   },
 
-  // Module name mapping for path aliases (matching your tsconfig.json)
+  // Module name mapping for path aliases
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^@config/(.*)$": "<rootDir>/src/config/$1",
@@ -62,32 +52,9 @@ const config = {
   // Coverage configuration
   collectCoverage: false,
   coverageDirectory: "coverage",
-  coverageProvider: "v8",
   
-  // Files to collect coverage from
-  collectCoverageFrom: [
-    "src/**/*.{ts,tsx}",
-    "!src/**/*.d.ts",
-    "!src/**/*.test.{ts,tsx}",
-    "!src/**/*.spec.{ts,tsx}",
-    "!src/index.ts", // Usually exclude main entry point
-  ],
-
-  // Coverage thresholds (disabled until source code is added)
-  // coverageThreshold: {
-  //   global: {
-  //     branches: 70,
-  //     functions: 70,
-  //     lines: 70,
-  //     statements: 70
-  //   }
-  // },
-
   // Clear mocks between tests
   clearMocks: true,
-
-  // Automatically restore mocks
-  restoreMocks: true,
 
   // Files to ignore in tests
   testPathIgnorePatterns: [
@@ -95,11 +62,8 @@ const config = {
     "/dist/"
   ],
 
-  // Setup files (run before each test file)
-  setupFilesAfterEnv: ["<rootDir>/tests/setup.ts"],
-
   // Verbose output
   verbose: true,
 };
 
-export default config;
+module.exports = config;
