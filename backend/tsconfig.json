@@ -69,15 +69,8 @@
     /* Completeness */
     "skipLibCheck": true
   },
-  "include": [
-    "src/**/*",
-    "src/**/*.json",
-    "tests/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "include": ["src/**/*", "src/**/*.json", "tests/**/*"],
+  "exclude": ["node_modules", "dist"],
   "ts-node": {
     "transpileOnly": true,
     "files": true
