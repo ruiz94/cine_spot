@@ -1,6 +1,6 @@
 name: Run tests on PR or push
 
-on: [pull_request, push]
+on: [pull_request]
 
 jobs:
   changes:
