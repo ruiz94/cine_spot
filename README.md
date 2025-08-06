@@ -74,7 +74,7 @@ CineSpot is a comprehensive cinema ticket booking platform that allows users to:
    cd ..
    ```
 
-5. **Start the applications**
+5. **Start the applications** (need to implement)
    ```bash
    # Start both frontend and backend concurrently
    npm run dev
