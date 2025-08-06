@@ -10,14 +10,14 @@ export const env = {
   // Server configuration
   PORT: process.env['PORT'] ? parseInt(process.env['PORT'], 10) : 3000,
   NODE_ENV: process.env['NODE_ENV'] || 'development',
-  
-  // Database configuration. 
+
+  // Database configuration.
   DATABASE_URL: process.env['DATABASE_URL'],
-  
+
   // JWT configuration (for future use)
   JWT_SECRET: process.env['JWT_SECRET'] || 'your-jwt-secret-change-in-production',
   JWT_EXPIRES_IN: process.env['JWT_EXPIRES_IN'] || '7d',
-  
+
   // API configuration
   API_KEY: process.env['API_KEY'],
 } as const;
@@ -27,13 +27,13 @@ export const env = {
  */
 export function validateEnv() {
   const requiredVars = ['DATABASE_URL'];
-  
-  const missingVars = requiredVars.filter(varName => !env[varName as keyof typeof env]);
-  
+
+  const missingVars = requiredVars.filter((varName) => !env[varName as keyof typeof env]);
+
   if (missingVars.length > 0) {
     throw new Error(
       `Missing required environment variables: ${missingVars.join(', ')}\n` +
-      'Please check your .env file or environment configuration.'
+        'Please check your .env file or environment configuration.',
     );
   }
 }

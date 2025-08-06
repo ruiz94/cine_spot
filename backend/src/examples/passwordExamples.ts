@@ -2,7 +2,6 @@
  * Ejemplo de uso en controladores
  */
 
-
 // ✅ CORRECTO: Registrar usuario
 // async function registerUser(req, res) {
 //   try {

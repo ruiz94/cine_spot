@@ -107,7 +107,7 @@ export class PasswordUtils {
 
     // Penalty por patrones comunes
     const commonPatterns = ['123', 'abc', 'password', 'qwerty'];
-    if (commonPatterns.some(pattern => password.toLowerCase().includes(pattern))) {
+    if (commonPatterns.some((pattern) => password.toLowerCase().includes(pattern))) {
       score -= 20;
       errors.push('Password contains common patterns');
     }
@@ -115,7 +115,7 @@ export class PasswordUtils {
     return {
       isValid: errors.length === 0,
       errors,
-      score: Math.max(0, Math.min(100, score))
+      score: Math.max(0, Math.min(100, score)),
     };
   }
 }

@@ -4,12 +4,11 @@ import { PasswordUtils } from '@/utils/password';
  * Tests para Password Utils
  */
 describe('PasswordUtils', () => {
-  
   describe('hashPassword', () => {
     test('should hash a valid password', async () => {
       const plainPassword = 'MySecurePassword123!';
       const hashedPassword = await PasswordUtils.hashPassword(plainPassword);
-      
+
       expect(hashedPassword).toBeDefined();
       expect(hashedPassword).not.toBe(plainPassword);
       expect(hashedPassword.length).toBeGreaterThan(50); // bcrypt hashes are long
@@ -20,7 +19,9 @@ describe('PasswordUtils', () => {
     });
 
     test('should throw error for short password', async () => {
-      await expect(PasswordUtils.hashPassword('short')).rejects.toThrow('Password must be at least 8 characters long');
+      await expect(PasswordUtils.hashPassword('short')).rejects.toThrow(
+        'Password must be at least 8 characters long',
+      );
     });
   });
 
@@ -28,7 +29,7 @@ describe('PasswordUtils', () => {
     test('should verify correct password', async () => {
       const plainPassword = 'MySecurePassword123!';
       const hashedPassword = await PasswordUtils.hashPassword(plainPassword);
-      
+
       const isValid = await PasswordUtils.verifyPassword(plainPassword, hashedPassword);
       expect(isValid).toBe(true);
     });
@@ -37,7 +38,7 @@ describe('PasswordUtils', () => {
       const plainPassword = 'MySecurePassword123!';
       const wrongPassword = 'WrongPassword123!';
       const hashedPassword = await PasswordUtils.hashPassword(plainPassword);
-      
+
       const isValid = await PasswordUtils.verifyPassword(wrongPassword, hashedPassword);
       expect(isValid).toBe(false);
     });
@@ -52,7 +53,7 @@ describe('PasswordUtils', () => {
     test('should validate strong password', () => {
       const strongPassword = 'ReallySecurePa1!';
       const result = PasswordUtils.validatePasswordStrength(strongPassword);
-      
+
       expect(result.isValid).toBe(true);
       expect(result.errors).toHaveLength(0);
       expect(result.score).toBeGreaterThan(70);
@@ -61,7 +62,7 @@ describe('PasswordUtils', () => {
     test('should reject weak password', () => {
       const weakPassword = 'password';
       const result = PasswordUtils.validatePasswordStrength(weakPassword);
-      
+
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
       expect(result.score).toBeLessThan(50);
@@ -70,7 +71,7 @@ describe('PasswordUtils', () => {
     test('should detect common patterns', () => {
       const commonPassword = 'password123';
       const result = PasswordUtils.validatePasswordStrength(commonPassword);
-      
+
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('Password contains common patterns');
     });

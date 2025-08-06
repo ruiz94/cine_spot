@@ -13,7 +13,7 @@ app.get('/health', (_req, res) => {
 app.post('/user/register', async (req, res) => {
   try {
     const { username, name, email, password, birthdate } = req.body;
-    if(!username || !name || !email || !password || !birthdate) {
+    if (!username || !name || !email || !password || !birthdate) {
       return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
@@ -22,17 +22,17 @@ app.post('/user/register', async (req, res) => {
       name,
       email,
       password, // Password in plain text
-      birthdate: new Date(birthdate)
+      birthdate: new Date(birthdate),
     });
     return res.status(201).json({
       success: true,
       message: 'User created successfully',
-      user // Do not include hashed password
+      user, // Do not include hashed password
     });
   } catch (error) {
     return res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : 'An unknown error occurred'
+      message: error instanceof Error ? error.message : 'An unknown error occurred',
     });
   }
 });
