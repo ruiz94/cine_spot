@@ -1,4 +1,4 @@
-import { PasswordUtils } from '../utils/password';
+import { PasswordUtils } from '../utils';
 import { prisma } from '../config';
 
 /**
@@ -137,6 +137,40 @@ export class UserService {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(`Failed to change password: ${errorMessage}`);
+    }
+  }
+
+  /**
+   * Obtener usuario por ID (util para rutas protegidas)
+   */
+  static async getUserById(userId: number) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          email: true,
+          role: true,
+          birthdate: true,
+          createdAt: true,
+          reward: {
+            select: {
+              totalPoints: true,
+              level: true,
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      return user;
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : 'Failed to get user');
     }
   }
 }
