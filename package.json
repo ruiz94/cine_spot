@@ -1,0 +1,12 @@
+{
+  "name": "cine_spot",
+  "version": "1.0.0",
+  "description": "A modern application to sell Cinema tickets.",
+  "main": "index.js",
+  "scripts": {
+    "dev:backend": "nodemon --watch backend --exec \"cd backend && npm run dev\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
