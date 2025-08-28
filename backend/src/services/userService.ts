@@ -73,7 +73,7 @@ export class UserService {
       });
 
       if (!user) {
-        throw new Error('Invalid credentials');
+        throw new Error('User not found');
       }
 
       // 2. Verificar contraseña
