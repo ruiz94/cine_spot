@@ -43,6 +43,7 @@ jobs:
     if: needs.changes.outputs.backend == 'true'
     name: Test Backend
     runs-on: ubuntu-latest
+    environment: test
     steps: 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -56,3 +57,9 @@ jobs:
       
       - name: Install dependencies and run tests
         run: cd backend && npm ci && npm run test:ci
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          PORT: ${{ vars.PORT }}
+          JWT_EXPIRES_IN: ${{ vars.JWT_EXPIRES_IN }}

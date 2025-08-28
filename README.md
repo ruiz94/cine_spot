@@ -1,20 +1,20 @@
 # 🎬 CineSpot
 
-A modern application to sell Cinema tickets.
+A modern application to manage Cinema tickets sales.
 
 ## 📋 Description
 
-CineSpot is a comprehensive cinema ticket booking platform that allows users to:
+CineSpot is a comprehensive cinema ticket managing platform that allows users to:
 - Browse current movies and showtimes
 - Select seats 
 - Purchase tickets online (future: secure payment processing)
-- Manage bookings and view ticket history
+- Manage ticket sells and view ticket purchasing history
 - Receive digital tickets via email or mobile app (future feature)
 - Get notifications about upcoming releases and special events (future feature)
 
 ## ✨ Features
 
-- �️ **Online Ticket Booking**: Easy and fast ticket purchasing system
+- �️ **Online Ticket Sales**: Easy and fast ticket purchasing system
 - 🎭 **Movie Catalog**: Browse current and upcoming movies with trailers
 - � **Loyalty Program**: Reward points and special discounts for frequent customers
 - 📊 **Admin Dashboard**: Comprehensive management tools for cinema operators
@@ -25,7 +25,7 @@ CineSpot is a comprehensive cinema ticket booking platform that allows users to:
 - Node.js (version 16 or higher)
 - npm or yarn
 - Git
-- PostgreSQL
+- Prisma
 
 ### Installation Steps
 
@@ -62,8 +62,9 @@ CineSpot is a comprehensive cinema ticket booking platform that allows users to:
    Edit the backend `.env` file with your configuration:
    ```env
    DATABASE_URL=your_database_connection_string
-   JWT_SECRET=your_jwt_secret
    PORT=5000
+   JWT_SECRET=tu_clave_super_secreta_de_al_menos_32_caracteres
+   JWT_EXPIRES_IN=24h
    ```
 
 4. **Set up the database**
@@ -144,8 +145,9 @@ const booking = await fetch('/api/bookings', {
 ### Backend
 - **Node.js** - JavaScript runtime environment
 - **Express.js** - Web framework for Node.js
-- **PostgreSQL** - Relational database
 - **Prisma** - Modern database toolkit
+- **Json Web Token** - 
+- **bcrypt** - 
 
 ### Services
 - **Vercel** - Deployment and hosting
@@ -155,6 +157,7 @@ const booking = await fetch('/api/bookings', {
 - **Prettier** - Code formatter
 - **Jest** - Testing framework
 - **Husky** - Git hooks
+- **Typescript** - 
 
 ## 📁 Project Structure
 
@@ -206,25 +209,19 @@ cine_spot/                 # Monorepo root
 
 ```bash
 # Run all tests
-npm test
-
-# Tests in watch mode
-npm run test:watch
-
-# Test coverage
-npm run test:coverage
-
-# E2E tests
-npm run test:e2e
+npm run test
+npm run test:backend
+npm run test:watch:backend
+npm run test:coverage:backend
 ```
 
 ## 🚀 Deployment
 
 ## 📝 Roadmap
 
-- [ ] **v1.0** - Core Features
-  - [x] Movie catalog
-  - [x] Seat selection
+- [x] **v1.0** - Core Features
+  - [] Movie catalog
+  - [] Seat selection
   - [ ] Payment processing
   - [ ] User authentication
 

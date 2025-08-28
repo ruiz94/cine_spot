@@ -16,5 +16,10 @@
     "^@services/(.*)$": "<rootDir>/src/services/$1",
     "^@utils/(.*)$": "<rootDir>/src/utils/$1",
     "^@types/(.*)$": "<rootDir>/src/types/$1"
-  }
+  },
+  "collectCoverage": true,
+  "collectCoverageFrom": ["src/**/*.{js,ts}", "!src/**/*.d.ts"],
+  "coverageDirectory": "<rootDir>/coverage",
+  "coverageReporters": ["text", "lcov"],
+  "setupFilesAfterEnv": ["<rootDir>/tests/setup.ts"]
 }

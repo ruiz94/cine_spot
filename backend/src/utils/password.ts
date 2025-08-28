@@ -47,7 +47,10 @@ export class PasswordUtils {
       const isMatch = await bcrypt.compare(plainPassword, hashedPassword);
       return isMatch;
     } catch (error) {
-      console.error('Error verifying password:', error);
+      console.error(
+        'Error verifying password:',
+        error instanceof Error ? error.message : 'Unknown error',
+      );
       return false;
     }
   }
