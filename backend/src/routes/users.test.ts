@@ -21,15 +21,13 @@ describe('User Routes', () => {
   app.use('/users', router);
 
   it('should call userController.createUser on POST /users/register', async () => {
-    const response = await request(app)
-      .post('/users/register')
-      .send({
-        username: 'test',
-        name: 'Test User',
-        email: 'test@test.com',
-        password: 'Test@1234',
-        birthdate: '1990-01-01',
-      });
+    const response = await request(app).post('/users/register').send({
+      username: 'test',
+      name: 'Test User',
+      email: 'test@test.com',
+      password: 'Test@1234',
+      birthdate: '1990-01-01',
+    });
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({

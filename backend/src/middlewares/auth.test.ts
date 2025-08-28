@@ -112,8 +112,6 @@ describe('requireRole Middleware', () => {
 describe('opcionalAuth Middleware', () => {
   //example protected route
   app.get('/optional-protected', opcionalAuth, (req: Request, res: Response) => {
-    console.log('🚀 ~ req:', req.user);
-
     res.status(200).json({ message: 'Access granted', user: req.user });
   });
 

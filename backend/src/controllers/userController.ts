@@ -1,10 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/userService';
 
-// const testUserController = (_: Request, res: Response) => {
-//   res.send('User controller is working...');
-// };
-
 const createUser = async (req: Request, res: Response) => {
   try {
     const { username, name, email, password, birthdate } = req.body;

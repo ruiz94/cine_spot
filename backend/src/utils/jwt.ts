@@ -15,7 +15,7 @@ export class JWTUtils {
   }
 
   /**
-   * Verificar y decodificar un token WT
+   * Verificar y decodificar un token JWT
    */
   static verifyToken(token: string): JWTPayload {
     try {
@@ -58,8 +58,7 @@ export class JWTUtils {
   static decodeToken(token: string): JwtPayload | null {
     try {
       return jwt.decode(token) as JWTPayload;
-    } catch (error) {
-      console.log(error instanceof Error && error.message);
+    } catch {
       return null;
     }
   }

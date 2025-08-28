@@ -40,8 +40,6 @@ export const requireRole = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {
       //verificar que el usuario esté autenticado
-
-      console.log('🚀 ~ requireRole ~ req.user:', req.user);
       if (!req.user) {
         res.status(401).json({
           success: false,
@@ -58,11 +56,11 @@ export const requireRole = (allowedRoles: string[]) => {
           required: allowedRoles,
           current: req.user.role,
         });
+        return;
       }
 
       next();
-    } catch (error) {
-      console.log(error instanceof Error && error.message);
+    } catch {
       res.status(500).json({
         success: false,
         message: 'Authorization check failed',
@@ -86,9 +84,8 @@ export const opcionalAuth = (req: Request, _: Response, next: NextFunction): voi
 
     //Siempre continua, con o sin autenticación
     next();
-  } catch (error) {
+  } catch {
     //si hay error, simplemente continúa sin usuario autenticado
-    console.log(error instanceof Error && error.message);
     next();
   }
 };
