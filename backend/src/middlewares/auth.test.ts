@@ -1,6 +1,6 @@
 import express, { Response, Request } from 'express';
 import request from 'supertest';
-import { authenticateToken, requireRole, opcionalAuth } from './auth';
+import { authenticateToken, requireRole, optionalAuth } from './auth';
 import { JWTUtils } from '../utils';
 
 //Mock JWTUtils
@@ -109,9 +109,9 @@ describe('requireRole Middleware', () => {
   });
 });
 
-describe('opcionalAuth Middleware', () => {
+describe('optionalAuth Middleware', () => {
   //example protected route
-  app.get('/optional-protected', opcionalAuth, (req: Request, res: Response) => {
+  app.get('/optional-protected', optionalAuth, (req: Request, res: Response) => {
     res.status(200).json({ message: 'Access granted', user: req.user });
   });
 

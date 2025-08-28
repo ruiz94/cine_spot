@@ -1,1 +1,1 @@
-export { authenticateToken, requireRole, opcionalAuth } from './auth';
+export { authenticateToken, requireRole, optionalAuth } from './auth';

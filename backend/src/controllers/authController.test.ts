@@ -34,7 +34,7 @@ describe('authController.login', () => {
     expect(statusMock).toHaveBeenCalledWith(400);
     expect(jsonMock).toHaveBeenCalledWith({
       success: false,
-      message: 'Username and password are required',
+      message: 'Email and password are required',
     });
   });
 
