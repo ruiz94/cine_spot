@@ -60,6 +60,6 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          NODE_ENV: ${{ secrets.NODE_ENV }}
-          PORT: ${{ secrets.PORT }}
-          JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          PORT: ${{ vars.PORT }}
+          JWT_EXPIRES_IN: ${{ vars.JWT_EXPIRES_IN }}
