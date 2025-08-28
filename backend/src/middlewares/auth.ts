@@ -40,6 +40,8 @@ export const requireRole = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {
       //verificar que el usuario esté autenticado
+
+      console.log('🚀 ~ requireRole ~ req.user:', req.user);
       if (!req.user) {
         res.status(401).json({
           success: false,

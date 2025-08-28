@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/userService';
 
-const testUserController = (_: Request, res: Response) => {
-  res.send('User controller is working...');
-};
+// const testUserController = (_: Request, res: Response) => {
+//   res.send('User controller is working...');
+// };
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -32,4 +32,4 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
-export default { testUserController, createUser };
+export default { createUser };

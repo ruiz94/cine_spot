@@ -1,5 +1,5 @@
 import { PasswordUtils } from '@/utils/password';
-
+import bcrypt from 'bcrypt';
 /**
  * Tests para Password Utils
  */
@@ -26,6 +26,9 @@ describe('PasswordUtils', () => {
   });
 
   describe('verifyPassword', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
     test('should verify correct password', async () => {
       const plainPassword = 'MySecurePassword123!';
       const hashedPassword = await PasswordUtils.hashPassword(plainPassword);
@@ -46,6 +49,13 @@ describe('PasswordUtils', () => {
     test('should handle empty passwords', async () => {
       const isValid = await PasswordUtils.verifyPassword('', 'somehash');
       expect(isValid).toBe(false);
+    });
+
+    test('should return false if there is an error with bcrypt', async () => {
+      jest.spyOn(bcrypt, 'compare').mockImplementation(() => {
+        throw new Error('failed compare function');
+      });
+      await expect(PasswordUtils.verifyPassword('somehash', 'somehash')).resolves.toBe(false);
     });
   });
 
@@ -74,6 +84,15 @@ describe('PasswordUtils', () => {
 
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('Password contains common patterns');
+    });
+
+    test('should detect no lowercase letter and less than 8 characters', () => {
+      const commonPassword = 'HELLO';
+      const result = PasswordUtils.validatePasswordStrength(commonPassword);
+
+      expect(result.errors).toContain('Password must be at least 8 characters long');
+      expect(result.errors).toContain('Password must contain at least one lowercase letter');
+      expect(result.isValid).toBe(false);
     });
   });
 });
