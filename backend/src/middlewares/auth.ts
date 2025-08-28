@@ -72,7 +72,7 @@ export const requireRole = (allowedRoles: string[]) => {
 /**
  * Middleware opcional de autenticación (no falla si no hay token)
  */
-export const opcionalAuth = (req: Request, _: Response, next: NextFunction): void => {
+export const optionalAuth = (req: Request, _: Response, next: NextFunction): void => {
   try {
     const authHeader = req.headers.authorization;
 
