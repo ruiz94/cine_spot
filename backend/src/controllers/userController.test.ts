@@ -143,10 +143,7 @@ describe('userController', () => {
     });
 
     it('should return error when user is not found', async () => {
-      (UserService.getUserById as jest.Mock).mockImplementation(() => {
-        {
-        }
-      });
+      (UserService.getUserById as jest.Mock).mockResolvedValue(undefined)
 
       req.params = {
         id: '1',
