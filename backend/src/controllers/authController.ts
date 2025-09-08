@@ -18,6 +18,7 @@ const login = async (req: Request, res: Response) => {
       success: true,
       message: 'Authentication successful',
       token,
+      user,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'An unknown error occurred';

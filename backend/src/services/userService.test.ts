@@ -9,6 +9,7 @@ jest.mock('../config', () => ({
       create: jest.fn(),
       findUnique: jest.fn(),
       update: jest.fn(),
+      findMany: jest.fn(),
     },
   },
 }));
@@ -291,7 +292,6 @@ describe('UserService.getUserById', () => {
         email: true,
         role: true,
         birthdate: true,
-        createdAt: true,
         reward: {
           select: {
             totalPoints: true,
@@ -314,5 +314,94 @@ describe('UserService.getUserById', () => {
     (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUserReturn);
 
     await expect(UserService.getUserById(1)).resolves.toEqual(mockUserReturn);
+  });
+});
+
+describe('UserService.getAllUser', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should return all Users', async () => {
+    (prisma.user.findMany as jest.Mock).mockResolvedValue([mockUserReturn]);
+
+    await expect(UserService.getAllUser()).resolves.toEqual([mockUserReturn]);
+    expect(prisma.user.findMany).toHaveBeenCalledWith({
+      skip: 0,
+      take: 20,
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
+        role: true,
+        birthdate: true,
+        reward: {
+          select: {
+            totalPoints: true,
+            level: true,
+          },
+        },
+      },
+      orderBy: { id: 'asc' },
+    });
+  });
+
+  test('should return Failed to get user', async () => {
+    (prisma.user.findMany as jest.Mock).mockImplementation(() => {
+      throw 'unexpected';
+    });
+
+    await expect(UserService.getAllUser()).rejects.toThrow(/Failed to get users/);
+  });
+});
+
+describe('UserService.updateUser', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should update a user successfully', async () => {
+    (prisma.user.update as jest.Mock).mockResolvedValue(mockUserReturn);
+    const mockData = {
+      name: 'Test name',
+      email: 'test@email.com',
+      birthdate: new Date('12/12/2000'),
+    };
+    await expect(UserService.updateUser(1, mockData)).resolves.toEqual(mockUserReturn);
+    expect(prisma.user.update).toHaveBeenCalledWith({
+      where: { id: 1 },
+      data: mockData,
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
+        role: true,
+        birthdate: true,
+        reward: {
+          select: {
+            totalPoints: true,
+            level: true,
+          },
+        },
+      },
+    });
+  });
+
+  test('should return Failed when no fields are passed', async () => {
+    await expect(UserService.updateUser(1, {})).rejects.toThrow(/No valid fields to update/);
+  });
+
+  test('should return Email already exists', async () => {
+    (prisma.user.update as jest.Mock).mockRejectedValue({
+      code: 'P2002',
+    });
+    const mockData = {
+      name: 'Test name',
+      email: 'test@email.com',
+      birthdate: new Date('12/12/2000'),
+    };
+    await expect(UserService.updateUser(1, mockData)).rejects.toThrow(/Email already exists/);
   });
 });
