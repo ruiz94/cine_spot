@@ -1,5 +1,6 @@
 import { PasswordUtils } from '../utils';
 import { prisma } from '../config';
+import { User } from '@prisma/client';
 
 /**
  * User Service - Manejo de usuarios con contraseñas seguras
@@ -141,6 +142,40 @@ export class UserService {
   }
 
   /**
+   * Obtener todos los usuarios
+   */
+  static async getAllUser(limit = 20, offset = 0) {
+    // Add pagination: default limit 20, offset 0
+    try {
+      // const limit = 20;
+      // const offset = 0;
+      const users = await prisma.user.findMany({
+        skip: offset,
+        take: limit,
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          email: true,
+          role: true,
+          birthdate: true,
+          reward: {
+            select: {
+              totalPoints: true,
+              level: true,
+            },
+          },
+        },
+        orderBy: { id: 'asc' },
+      });
+      return users;
+    } catch (error) {
+      // Optionally log error here
+      throw new Error(error instanceof Error ? error.message : 'Failed to get users');
+    }
+  }
+
+  /**
    * Obtener usuario por ID (util para rutas protegidas)
    */
   static async getUserById(userId: number) {
@@ -154,7 +189,6 @@ export class UserService {
           email: true,
           role: true,
           birthdate: true,
-          createdAt: true,
           reward: {
             select: {
               totalPoints: true,
@@ -171,6 +205,51 @@ export class UserService {
       return user;
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : 'Failed to get user');
+    }
+  }
+
+  /**
+   * Actualizar datos del usuario
+   */
+  static async updateUser(userId: number, data: Partial<User>) {
+    try {
+      const updateData: Partial<Pick<User, 'name' | 'email' | 'birthdate'>> = {};
+      if ('name' in data && data.name !== undefined) updateData['name'] = data.name;
+      if ('email' in data && data.email !== undefined) updateData['email'] = data.email;
+      if ('birthdate' in data && data.birthdate !== undefined) {
+        updateData['birthdate'] =
+          typeof data.birthdate === 'string' ? new Date(data.birthdate) : data.birthdate;
+      }
+      if (Object.keys(updateData).length === 0) {
+        throw new Error('No valid fields to update');
+      }
+      const userUpdated = await prisma.user.update({
+        where: { id: userId },
+        data: updateData,
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          email: true,
+          role: true,
+          birthdate: true,
+          reward: {
+            select: {
+              totalPoints: true,
+              level: true,
+            },
+          },
+        },
+      });
+      return userUpdated;
+    } catch (error: unknown) {
+      // Handle unique constraint errors (e.g., duplicate email)
+      if (typeof error === 'object' && error !== null && 'code' in error) {
+        if (error.code === 'P2002') {
+          throw new Error('Email already exists');
+        }
+      }
+      throw new Error(error instanceof Error ? error.message : 'Failed to update user');
     }
   }
 }

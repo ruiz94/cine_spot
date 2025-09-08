@@ -2,7 +2,7 @@ import express, { Response, Request } from 'express';
 import request from 'supertest';
 import { authenticateToken, requireRole, optionalAuth } from './auth';
 import { JWTUtils } from '../utils';
-
+process.env['NODE_ENV'] = 'test';
 //Mock JWTUtils
 jest.mock('../utils/jwt');
 

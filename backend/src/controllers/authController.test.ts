@@ -62,6 +62,7 @@ describe('authController.login', () => {
       success: true,
       message: 'Authentication successful',
       token,
+      user: userMock,
     });
   });
 
