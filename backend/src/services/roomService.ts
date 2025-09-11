@@ -33,4 +33,24 @@ export class RoomService {
       throw new Error(`Failed to create room: ${errorMessage}`);
     }
   }
+
+  static async getAll (limit = 20, offset = 0){
+    try {
+      const rooms = await prisma.room.findMany({
+        skip: offset,
+        take: limit,
+        select: {
+          id: true,
+          name: true,
+          capacity: true,
+          schedules: true
+        },
+        orderBy: { id: 'asc' },
+      });
+      return rooms;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Failed to get rooms: ${errorMessage}`);
+    }
+  }
 }

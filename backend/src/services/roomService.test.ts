@@ -4,7 +4,8 @@ import { prisma } from '../config';
 jest.mock('../config', () => ({
   prisma: {
     room: {
-      create: jest.fn()
+      create: jest.fn(),
+      findMany: jest.fn()
     }
   }
 }));
@@ -53,6 +54,36 @@ describe('RoomService', () => {
         }
       });
       expect(responseRoom).toEqual(mockRoomResponse);
+    })
+  })
+
+  describe('getAll', () => {
+
+    it('should throw error when service fails', async () => {
+      (prisma.room.findMany as jest.Mock).mockRejectedValue(new Error('DB Error'));
+      await expect(RoomService.getAll()).rejects.toThrow(/Failed to get rooms: DB Error/);
+    })
+
+    it('should handle unknown errors gracefully', async () => {
+      (prisma.room.findMany as jest.Mock).mockRejectedValue('DB Error');
+      await expect(RoomService.getAll()).rejects.toThrow(/Unknown error/);
+    })
+
+    it('should fetch rooms successfully', async () => {
+      (prisma.room.findMany as jest.Mock).mockReturnValue([mockRoomResponse]);
+      const responseRoom = await RoomService.getAll(10, 0);
+      expect(prisma.room.findMany).toHaveBeenCalledWith({
+        skip: 0,
+        take: 10,
+        select: {
+          id: true,
+          name: true,
+          capacity: true,
+          schedules: true
+        },
+        orderBy: { id: 'asc' },
+      });
+      expect(responseRoom).toEqual([mockRoomResponse]);
     })
   })
 })

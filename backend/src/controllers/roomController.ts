@@ -20,4 +20,22 @@ const createRoom = async (req: Request, res: Response) => {
   }
 }
 
-export default { createRoom }
+const getAllRooms = async (req: Request, res: Response) => {
+  try {
+    const { limit, offset } = req.body.query
+    const rooms = await RoomService.getAll(limit, offset);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Rooms fetched successfully',
+      data: rooms,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error instanceof Error ? error.message : 'An unknown error occurred',
+    });
+  }
+}
+
+export default { createRoom, getAllRooms }

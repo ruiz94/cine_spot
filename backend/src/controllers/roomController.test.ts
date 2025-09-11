@@ -85,4 +85,66 @@ describe('roomController', () => {
       })
     })
   })
+
+  describe('getAllRooms', () => {
+
+    it('should return 200 when rooms are fetched successfully', async () => {
+      const roomMock = {
+        id: 1,
+        name: 'A1',
+        capacity: 20,
+        schedules: []
+      };
+
+      (RoomService.getAll as jest.Mock).mockReturnValue([roomMock]);
+
+      req.body.query = {
+        limit: 10,
+        offset: 0
+      }
+
+      await roomController.getAllRooms(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(200);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: true,
+        message: 'Rooms fetched successfully',
+        data: [roomMock]
+      })
+    })
+
+    it('should return 400 when fails', async () => {
+
+      (RoomService.getAll as jest.Mock).mockRejectedValue(new Error('Error fetching rooms'));
+      req.body.query = {
+        limit: 10,
+        offset: 0
+      }
+
+      await roomController.getAllRooms(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(400);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error fetching rooms',
+      })
+    })
+
+    it('should handle unknown errors gracefully', async () => {
+
+      (RoomService.getAll as jest.Mock).mockRejectedValue('Error fetching rooms');
+      req.body.query = {
+        limit: 10,
+        offset: 0
+      }
+
+      await roomController.getAllRooms(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(400);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: false,
+        message: 'An unknown error occurred',
+      })
+    })
+  })
 })
