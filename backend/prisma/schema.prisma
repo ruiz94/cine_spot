@@ -85,7 +85,7 @@ model PointTransaction {
 
 model Room {
   id       Int    @id @default(autoincrement())
-  name     String
+  name     String @unique
   capacity Int
 
   schedules Schedule[]
