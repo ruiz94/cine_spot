@@ -1,0 +1,23 @@
+import { Response, Request } from 'express';
+import { RoomService } from '../services/roomService';
+
+const createRoom = async (req: Request, res: Response) => {
+  try {
+    const { name, capacity } = req.body;
+
+    const createdRoom = await RoomService.createRoom({ name, capacity });
+
+    return res.status(201).json({
+      success: true,
+      message: 'Room created successfully',
+      room: createdRoom
+    })
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error instanceof Error ? error.message : 'An unknown error occurred',
+    });
+  }
+}
+
+export default { createRoom }

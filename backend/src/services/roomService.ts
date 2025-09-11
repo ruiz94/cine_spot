@@ -1,0 +1,36 @@
+import { prisma } from '../config';
+
+/**
+ * Room Service - Manejo de los rooms, ADMIN protected
+ */
+export class RoomService {
+  /**
+   * Crear un nuevo room
+   */
+  static async createRoom ({ name, capacity }: {name: string, capacity: number}){
+    try {
+      const room = await prisma.room.create({
+        data: {
+          name, capacity
+        },
+        select: {
+          id: true,
+          name: true,
+          capacity: true,
+          schedules: true
+        }
+      })
+      return room;
+    } catch (error) {
+      // Handle unique constraint errors (e.g., duplicate name)
+      if (typeof error === 'object' && error !== null && 'code' in error) {
+        if (error.code === 'P2002') {
+          throw new Error('Name already exists');
+        }
+      }
+
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Failed to create room: ${errorMessage}`);
+    }
+  }
+}
