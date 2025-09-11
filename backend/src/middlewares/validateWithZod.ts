@@ -15,7 +15,12 @@ export function validateWithZod<T>(
       });
     }
     // Opcional: asignar los datos parseados de vuelta a la request
-    req[property] = result.data;
+    if (property === 'query') {
+      Object.assign(req.query, result.data);
+      req.body = { ...req.body, query: result.data }
+    } else {
+      req[property] = result.data;
+    }
     next();
   };
 }
