@@ -38,4 +38,24 @@ const getAllRooms = async (req: Request, res: Response) => {
   }
 }
 
-export default { createRoom, getAllRooms }
+const updateRoom = async (req: Request, res: Response) => {
+  try {
+    const userId = req.body.params.id;
+    const { capacity } = req.body
+    
+    const roomUpdated = await RoomService.updateRoom(userId, capacity);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Room updated successfully',
+      data: roomUpdated,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error instanceof Error ? error.message : 'An unknown error occurred',
+    });
+  }
+}
+
+export default { createRoom, getAllRooms, updateRoom }

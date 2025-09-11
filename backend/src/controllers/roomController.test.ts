@@ -147,4 +147,72 @@ describe('roomController', () => {
       })
     })
   })
+
+  describe('updateRoom', () => {
+
+    it('should return 200 when room is created successfully', async () => {
+      const roomMock = {
+        id: 1,
+        name: 'A1',
+        capacity: 20,
+        schedules: []
+      };
+
+      (RoomService.updateRoom as jest.Mock).mockReturnValue(roomMock);
+      
+      req.body = {
+        params: {
+          id: 1
+        },
+        capacity: 20
+      }
+
+      await roomController.updateRoom(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(200);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: true,
+        message: 'Room updated successfully',
+        data: roomMock
+      })
+    })
+
+    it('should return 400 when fails', async () => {
+
+      (RoomService.updateRoom as jest.Mock).mockRejectedValue(new Error('Error updating a room'));
+      req.body = {
+        params: {
+          id: 1
+        },
+        capacity: 20
+      }
+
+      await roomController.updateRoom(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(400);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: false,
+        message: 'Error updating a room',
+      })
+    })
+
+    it('should handle unknown errors gracefully', async () => {
+
+      (RoomService.updateRoom as jest.Mock).mockRejectedValue('Error updating a room');
+      req.body = {
+        params: {
+          id: 1
+        },
+        capacity: 20
+      }
+
+      await roomController.updateRoom(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(400);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: false,
+        message: 'An unknown error occurred',
+      })
+    })
+  })
 })

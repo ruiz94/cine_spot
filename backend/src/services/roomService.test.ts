@@ -5,7 +5,8 @@ jest.mock('../config', () => ({
   prisma: {
     room: {
       create: jest.fn(),
-      findMany: jest.fn()
+      findMany: jest.fn(),
+      update: jest.fn()
     }
   }
 }));
@@ -84,6 +85,35 @@ describe('RoomService', () => {
         orderBy: { id: 'asc' },
       });
       expect(responseRoom).toEqual([mockRoomResponse]);
+    })
+  })
+
+  describe('updateRoom', () => {
+
+    it('should throw error when service fails', async () => {
+      (prisma.room.update as jest.Mock).mockRejectedValue(new Error('DB Error'));
+      await expect(RoomService.updateRoom(1, 10)).rejects.toThrow(/Failed to update room: DB Error/);
+    })
+
+    it('should handle unknown errors gracefully', async () => {
+      (prisma.room.update as jest.Mock).mockRejectedValue('DB Error');
+      await expect(RoomService.updateRoom(1, 10)).rejects.toThrow(/Unknown error/);
+    })
+
+    it('should update a room successfully', async () => {
+      (prisma.room.update as jest.Mock).mockReturnValue(mockRoomResponse);
+      const responseRoom = await RoomService.updateRoom(1, 20);
+      expect(prisma.room.update).toHaveBeenCalledWith({
+        where: { id: 1 },
+        data: { capacity: 20 },
+        select: {
+          id: true,
+          name: true,
+          capacity: true,
+          schedules: true
+        }
+      });
+      expect(responseRoom).toEqual(mockRoomResponse);
     })
   })
 })

@@ -34,6 +34,9 @@ export class RoomService {
     }
   }
 
+  /**
+   * getAll rooms
+   */
   static async getAll (limit = 20, offset = 0){
     try {
       const rooms = await prisma.room.findMany({
@@ -51,6 +54,30 @@ export class RoomService {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(`Failed to get rooms: ${errorMessage}`);
+    }
+  }
+
+  /**
+   * Update un room
+   */
+  static async updateRoom (userId: number, capacity: number){
+    try {
+      const room = await prisma.room.update({
+        where: { id: userId },
+        data: {
+          capacity
+        },
+        select: {
+          id: true,
+          name: true,
+          capacity: true,
+          schedules: true
+        }
+      })
+      return room;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Failed to update room: ${errorMessage}`);
     }
   }
 }

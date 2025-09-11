@@ -7,3 +7,5 @@ export const createRoomSchema = z.object({
     message: 'Capacity must be greater than 0'
   })
 })
+
+export const updateRoomSchema = createRoomSchema.pick({ capacity: true });
