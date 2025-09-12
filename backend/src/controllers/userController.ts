@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/userService';
-import { createUserSchema, updateUserSchema } from '@/utils/schemas/users';
-import { validateParamID, validateLimitOffset } from '@/utils/schemas/generic';
+import { createUserSchema, updateUserSchema } from '../utils/schemas/users';
+import { validateParamID, validateLimitOffset } from '../utils/schemas/generic';
 
 const createUser = async (req: Request, res: Response) => {
   const parseResult = createUserSchema.safeParse(req.body);
