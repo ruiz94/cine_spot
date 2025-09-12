@@ -1,5 +1,6 @@
 import { Response, Request } from 'express';
 import { RoomService } from '../services/roomService';
+import logger from '../utils/logger';
 
 const createRoom = async (req: Request, res: Response) => {
   try {
@@ -13,9 +14,11 @@ const createRoom = async (req: Request, res: Response) => {
       room: createdRoom,
     });
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    logger.error(message);
     return res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
+      message: 'Failed to create the room.',
     });
   }
 };
@@ -31,9 +34,11 @@ const getAllRooms = async (req: Request, res: Response) => {
       data: rooms,
     });
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    logger.error(message);
     return res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
+      message: 'Failed to get rooms.',
     });
   }
 };
@@ -49,9 +54,11 @@ const getRoomByID = async (req: Request, res: Response) => {
       data: room,
     });
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    logger.error(message);
     return res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
+      message: 'Failed to get the room.',
     });
   }
 };
@@ -69,9 +76,11 @@ const updateRoom = async (req: Request, res: Response) => {
       data: roomUpdated,
     });
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    logger.error(message);
     return res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
+      message: 'Failed to update the room.',
     });
   }
 };
@@ -84,12 +93,11 @@ const deleteRoom = async (req: Request, res: Response) => {
 
     return res.status(204).send();
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    logger.error(message);
     return res.status(400).json({
       success: false,
-      message:
-        error instanceof Error
-          ? 'An error occurred trying to delete a room'
-          : 'An unknown error occurred',
+      message: 'Failed to delete the room.',
     });
   }
 };

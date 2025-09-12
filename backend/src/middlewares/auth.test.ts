@@ -28,7 +28,7 @@ describe('authenticateToken Middleware', () => {
     expect(res.status).toBe(401);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe('Unauthorized');
-    expect(res.body.error).toBe('Authorization header missing');
+    expect(res.body.error).toBe('Authentication failed');
   });
 
   it('should return 401 if token is invalid', async () => {

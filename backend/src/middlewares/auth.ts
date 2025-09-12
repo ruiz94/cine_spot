@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { JWTUtils, JWTPayload } from '../utils/jwt';
-
+import logger from '../utils/logger';
 //Extender el tipo Request para incluir user
 declare global {
   namespace Express {
@@ -28,10 +28,11 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     next();
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Authentication failed';
+    logger.error(message);
     res.status(401).json({
       success: false,
       message: 'Unauthorized',
-      error: message,
+      error: 'Authentication failed',
     });
   }
 };
@@ -60,7 +61,9 @@ export const requireRole = (allowedRoles: string[]) => {
       }
 
       next();
-    } catch {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unknown error occurred';
+      logger.error(message);
       res.status(500).json({
         success: false,
         message: 'Authorization check failed',

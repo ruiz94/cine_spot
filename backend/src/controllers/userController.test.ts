@@ -97,7 +97,7 @@ describe('userController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'User already exists',
+        message: 'Failed to create the user.',
       });
     });
 
@@ -117,7 +117,7 @@ describe('userController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'An unknown error occurred',
+        message: 'Failed to create the user.',
       });
     });
   });
@@ -170,7 +170,7 @@ describe('userController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'An unknown error occurred',
+        message: 'Failed to get the user.',
       });
     });
 
@@ -289,7 +289,7 @@ describe('userController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'An unknown error occurred',
+        message: 'Failed to update the user.',
       });
     });
 
@@ -353,7 +353,7 @@ describe('userController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'An unknown error occurred',
+        message: 'Failed to get users.',
       });
     });
 
@@ -365,7 +365,7 @@ describe('userController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'Some unknown error',
+        message: 'Failed to get users.',
       });
     });
 

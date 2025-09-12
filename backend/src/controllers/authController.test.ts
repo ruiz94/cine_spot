@@ -81,7 +81,6 @@ describe('authController.login', () => {
     expect(jsonMock).toHaveBeenCalledWith({
       success: false,
       message: 'Authentication failed',
-      error: 'User not found',
     });
   });
 
@@ -98,7 +97,6 @@ describe('authController.login', () => {
     expect(jsonMock).toHaveBeenCalledWith({
       success: false,
       message: 'Authentication failed',
-      error: 'An unknown error occurred',
     });
   });
 });

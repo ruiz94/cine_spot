@@ -61,7 +61,7 @@ describe('roomController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'Error creating a room',
+        message: 'Failed to create the room.',
       });
     });
 
@@ -77,7 +77,7 @@ describe('roomController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'An unknown error occurred',
+        message: 'Failed to create the room.',
       });
     });
   });
@@ -120,7 +120,7 @@ describe('roomController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'Error fetching rooms',
+        message: 'Failed to get rooms.',
       });
     });
 
@@ -136,7 +136,7 @@ describe('roomController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'An unknown error occurred',
+        message: 'Failed to get rooms.',
       });
     });
   });
@@ -183,7 +183,7 @@ describe('roomController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'Error updating a room',
+        message: 'Failed to update the room.',
       });
     });
 
@@ -201,7 +201,7 @@ describe('roomController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'An unknown error occurred',
+        message: 'Failed to update the room.',
       });
     });
   });
@@ -242,7 +242,7 @@ describe('roomController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'An error occurred trying to delete a room',
+        message: 'Failed to delete the room.',
       });
     });
 
@@ -259,7 +259,7 @@ describe('roomController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'An unknown error occurred',
+        message: 'Failed to delete the room.',
       });
     });
   });
@@ -304,7 +304,7 @@ describe('roomController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'Error fetching a room',
+        message: 'Failed to get the room.',
       });
     });
 
@@ -321,7 +321,7 @@ describe('roomController', () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
-        message: 'An unknown error occurred',
+        message: 'Failed to get the room.',
       });
     });
   });
