@@ -78,14 +78,12 @@ describe('validateWithZod', () => {
 
   describe('success:body', () => {
     app.post('/rooms', validateWithZod(createRoomSchema, 'body'), (req: Request, res: Response) => {
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: 'Access granted',
-          name: req.body.name,
-          capacity: req.body.capacity,
-        });
+      res.status(200).json({
+        success: true,
+        message: 'Access granted',
+        name: req.body.name,
+        capacity: req.body.capacity,
+      });
     });
 
     test('return name and capacity in the body', async () => {

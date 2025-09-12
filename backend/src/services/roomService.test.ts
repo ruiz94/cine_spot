@@ -131,7 +131,7 @@ describe('RoomService', () => {
       await expect(RoomService.deleteRoom(1)).rejects.toThrow(/Unknown error/);
     });
 
-    it('should update a room successfully', async () => {
+    it('should delete a room successfully', async () => {
       (prisma.room.delete as jest.Mock).mockReturnValue(mockRoomResponse);
       const responseRoom = await RoomService.deleteRoom(1);
       expect(prisma.room.delete).toHaveBeenCalledWith({

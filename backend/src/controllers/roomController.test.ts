@@ -207,7 +207,7 @@ describe('roomController', () => {
   });
 
   describe('deleteRoom', () => {
-    it('should return 200 when room is deleted successfully', async () => {
+    it('should return 204 when room is deleted successfully', async () => {
       const roomMock = {
         id: 1,
         name: 'A1',
