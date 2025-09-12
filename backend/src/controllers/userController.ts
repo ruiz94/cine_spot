@@ -1,19 +1,9 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/userService';
-import { createUserSchema, updateUserSchema } from '../utils/schemas/users';
-import { validateParamID, validateLimitOffset } from '../utils/schemas/generic';
 import logger from '../utils/logger';
 
 const createUser = async (req: Request, res: Response) => {
-  const parseResult = createUserSchema.safeParse(req.body);
-  if (!parseResult.success) {
-    return res.status(400).json({
-      success: false,
-      message: 'Validation failed',
-      errors: parseResult.error.issues,
-    });
-  }
-  const { username, name, email, password, birthdate } = parseResult.data;
+  const { username, name, email, password, birthdate } = req.body;
   try {
     const user = await UserService.createUser({
       username,
@@ -38,15 +28,7 @@ const createUser = async (req: Request, res: Response) => {
 };
 
 const getUserByID = async (req: Request, res: Response) => {
-  const parseResult = validateParamID.safeParse(req.params);
-  if (!parseResult.success) {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid user id',
-      errors: parseResult.error.issues,
-    });
-  }
-  const userID = parseResult.data.id;
+  const userID = req.body.params.id;
 
   try {
     const userResponse = await UserService.getUserById(userID);
@@ -69,26 +51,8 @@ const getUserByID = async (req: Request, res: Response) => {
 };
 
 const updateUser = async (req: Request, res: Response) => {
-  const parseParamsResult = validateParamID.safeParse(req.params);
-  if (!parseParamsResult.success) {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid user id',
-      errors: parseParamsResult.error.issues,
-    });
-  }
-  const userID = parseParamsResult.data.id;
-
-  const parseResult = updateUserSchema.safeParse(req.body);
-  if (!parseResult.success) {
-    return res.status(400).json({
-      success: false,
-      message: 'Validation failed',
-      errors: parseResult.error.issues,
-    });
-  }
-
   try {
+    const userID = req.body.params.id;
     const userResponse = await UserService.getUserById(userID);
 
     if (!userResponse) {
@@ -100,7 +64,7 @@ const updateUser = async (req: Request, res: Response) => {
     const userUpdated = await UserService.updateUser(Number(userID), {
       email,
       name,
-      birthdate: new Date(birthdate),
+      birthdate,
     });
 
     return res.status(200).json({
@@ -118,18 +82,8 @@ const updateUser = async (req: Request, res: Response) => {
 };
 
 const getAllUsers = async (req: Request, res: Response) => {
-  const parseResult = validateLimitOffset.safeParse(req.query);
-  if (!parseResult.success) {
-    return res.status(400).json({
-      success: false,
-      message: 'Validation failed',
-      errors: parseResult.error.issues,
-    });
-  }
-
   try {
-    const limit = parseResult.data.limit;
-    const offset = parseResult.data.offset;
+    const { limit, offset } = req.body.query;
     const users = await UserService.getAllUser(limit, offset);
 
     return res.status(200).json({
