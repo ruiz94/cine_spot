@@ -60,10 +60,10 @@ export class RoomService {
   /**
    * Update un room
    */
-  static async updateRoom (userId: number, capacity: number){
+  static async updateRoom (roomID: number, capacity: number){
     try {
       const room = await prisma.room.update({
-        where: { id: userId },
+        where: { id: roomID },
         data: {
           capacity
         },
@@ -78,6 +78,21 @@ export class RoomService {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(`Failed to update room: ${errorMessage}`);
+    }
+  }
+
+  /**
+   * Eliminar un room
+   */
+  static async deleteRoom (roomID: number){
+    try {
+      const room = await prisma.room.delete({
+        where: { id: roomID },
+      })
+      return room;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Failed to delete room: ${errorMessage}`);
     }
   }
 }

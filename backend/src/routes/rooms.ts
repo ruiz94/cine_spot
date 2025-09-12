@@ -17,4 +17,7 @@ router.get('/', requireRole(['ADMIN']), validateWithZod(validateLimitOffset, 'qu
 //Update room
 router.patch('/:id', requireRole(['ADMIN']), validateWithZod(validateParamID, 'params'), validateWithZod(updateRoomSchema, 'body'), roomController.updateRoom);
 
+//Delete room
+router.delete('/:id', requireRole(['ADMIN']), validateWithZod(validateParamID, 'params'), roomController.deleteRoom);
+
 export default router;

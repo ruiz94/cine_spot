@@ -58,4 +58,19 @@ const updateRoom = async (req: Request, res: Response) => {
   }
 }
 
-export default { createRoom, getAllRooms, updateRoom }
+const deleteRoom = async (req: Request, res: Response) => {
+  try {
+    const roomID = req.body.params.id;
+    
+    await RoomService.deleteRoom(roomID);
+    
+    return res.status(204).send();
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error instanceof Error ? 'An error occurred trying to delete a room' : 'An unknown error occurred',
+    });
+  }
+}
+
+export default { createRoom, getAllRooms, updateRoom, deleteRoom }

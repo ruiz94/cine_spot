@@ -215,4 +215,65 @@ describe('roomController', () => {
       })
     })
   })
+
+  describe('deleteRoom', () => {
+
+    it('should return 200 when room is deleted successfully', async () => {
+      const roomMock = {
+        id: 1,
+        name: 'A1',
+        capacity: 20,
+        schedules: []
+      };
+
+      (RoomService.deleteRoom as jest.Mock).mockReturnValue(roomMock);
+      
+      req.body = {
+        params: {
+          id: 1
+        }
+      }
+
+      await roomController.deleteRoom(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(204);
+      expect(RoomService.deleteRoom).toHaveBeenCalledWith(1);
+    })
+
+    it('should return 400 when fails', async () => {
+
+      (RoomService.deleteRoom as jest.Mock).mockRejectedValue(new Error('Error deleting a room'));
+      req.body = {
+        params: {
+          id: 1
+        }
+      }
+
+      await roomController.deleteRoom(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(400);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: false,
+        message: 'An error occurred trying to delete a room',
+      })
+    })
+
+    it('should handle unknown errors gracefully', async () => {
+
+      (RoomService.deleteRoom as jest.Mock).mockRejectedValue('Error updating a room');
+      req.body = {
+        params: {
+          id: 1
+        }
+      }
+
+      await roomController.deleteRoom(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(400);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: false,
+        message: 'An unknown error occurred',
+      })
+    })
+  })
 })

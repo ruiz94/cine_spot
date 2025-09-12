@@ -6,7 +6,8 @@ jest.mock('../config', () => ({
     room: {
       create: jest.fn(),
       findMany: jest.fn(),
-      update: jest.fn()
+      update: jest.fn(),
+      delete: jest.fn()
     }
   }
 }));
@@ -112,6 +113,28 @@ describe('RoomService', () => {
           capacity: true,
           schedules: true
         }
+      });
+      expect(responseRoom).toEqual(mockRoomResponse);
+    })
+  })
+
+  describe('deleteRoom', () => {
+
+    it('should throw error when service fails', async () => {
+      (prisma.room.delete as jest.Mock).mockRejectedValue(new Error('DB Error'));
+      await expect(RoomService.deleteRoom(1)).rejects.toThrow(/Failed to delete room: DB Error/);
+    })
+
+    it('should handle unknown errors gracefully', async () => {
+      (prisma.room.delete as jest.Mock).mockRejectedValue('DB Error');
+      await expect(RoomService.deleteRoom(1)).rejects.toThrow(/Unknown error/);
+    })
+
+    it('should update a room successfully', async () => {
+      (prisma.room.delete as jest.Mock).mockReturnValue(mockRoomResponse);
+      const responseRoom = await RoomService.deleteRoom(1);
+      expect(prisma.room.delete).toHaveBeenCalledWith({
+        where: { id: 1 }
       });
       expect(responseRoom).toEqual(mockRoomResponse);
     })
