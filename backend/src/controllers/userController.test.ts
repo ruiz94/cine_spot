@@ -24,28 +24,6 @@ describe('userController', () => {
   });
 
   describe('createUser', () => {
-    it('should return 400 if any required field is missing', async () => {
-      req.body = {
-        username: 'testuser',
-        name: 'Test User',
-        email: 'test@example.com',
-        password: 'password123',
-        // birthdate missing
-      };
-      await userController.createUser(req as Request, res as Response);
-      expect(statusMock).toHaveBeenCalledWith(400);
-      expect(jsonMock).toHaveBeenCalledWith({
-        success: false,
-        message: 'Validation failed',
-        errors: expect.arrayContaining([
-          expect.objectContaining({
-            path: ['birthdate'],
-            code: 'invalid_type',
-          }),
-        ]),
-      });
-    });
-
     it('should create a user and return 201 with user data', async () => {
       const userMock = {
         id: 1,
@@ -123,30 +101,11 @@ describe('userController', () => {
   });
 
   describe('getUserByID', () => {
-    it('should return 400 if id is not number', async () => {
-      req.params = {
-        id: 'testid',
-      };
-      await userController.getUserByID(req as Request, res as Response);
-      expect(statusMock).toHaveBeenCalledWith(400);
-      expect(jsonMock).toHaveBeenCalledWith({
-        success: false,
-        message: 'Invalid user id',
-        errors: expect.arrayContaining([
-          expect.objectContaining({
-            path: ['id'],
-            code: 'custom',
-            message: 'ID must be a positive integer',
-          }),
-        ]),
-      });
-    });
-
     it('should return error when user is not found', async () => {
       (UserService.getUserById as jest.Mock).mockResolvedValue(undefined);
 
-      req.params = {
-        id: '1',
+      req.body.params = {
+        id: 1,
       };
 
       await userController.getUserByID(req as Request, res as Response);
@@ -161,8 +120,8 @@ describe('userController', () => {
     it('should handle unknown errors gracefully', async () => {
       (UserService.getUserById as jest.Mock).mockRejectedValue('Some unknown error');
 
-      req.params = {
-        id: '1',
+      req.body.params = {
+        id: 1,
       };
 
       await userController.getUserByID(req as Request, res as Response);
@@ -190,8 +149,8 @@ describe('userController', () => {
 
       (UserService.getUserById as jest.Mock).mockResolvedValue(userMock);
 
-      req.params = {
-        id: '1',
+      req.body.params = {
+        id: 1,
       };
 
       await userController.getUserByID(req as Request, res as Response);
@@ -206,63 +165,16 @@ describe('userController', () => {
   });
 
   describe('updateUser', () => {
-    it('should return 400 if id is not number', async () => {
-      req.params = {
-        id: 'testid',
-      };
-      await userController.updateUser(req as Request, res as Response);
-      expect(statusMock).toHaveBeenCalledWith(400);
-      expect(jsonMock).toHaveBeenCalledWith({
-        success: false,
-        message: 'Invalid user id',
-        errors: expect.arrayContaining([
-          expect.objectContaining({
-            path: ['id'],
-            code: 'custom',
-            message: 'ID must be a positive integer',
-          }),
-        ]),
-      });
-    });
-
-    it('should return 400 if validation fails', async () => {
-      req.params = {
-        id: '1',
-      };
-      req.body = {
-        birthdate: 'testuser',
-        name: 'Test User',
-        email: 'test',
-      };
-      await userController.updateUser(req as Request, res as Response);
-      expect(statusMock).toHaveBeenCalledWith(400);
-      expect(jsonMock).toHaveBeenCalledWith({
-        success: false,
-        message: 'Validation failed',
-        errors: expect.arrayContaining([
-          expect.objectContaining({
-            path: ['birthdate'],
-            code: 'custom',
-            message: 'Invalid birthdate',
-          }),
-          expect.objectContaining({
-            path: ['email'],
-            code: 'invalid_format',
-            message: 'Invalid email',
-          }),
-        ]),
-      });
-    });
-
     it('should return 404 if user is not found', async () => {
       (UserService.getUserById as jest.Mock).mockResolvedValue(undefined);
-      req.params = {
-        id: '1',
-      };
+
       req.body = {
         birthdate: new Date('2000-01-01').toDateString(),
         name: 'Test User',
         email: 'test@email.com',
+        params: {
+          id: 1,
+        },
       };
       await userController.updateUser(req as Request, res as Response);
       expect(statusMock).toHaveBeenCalledWith(404);
@@ -275,13 +187,13 @@ describe('userController', () => {
     it('should handle unknown errors gracefully', async () => {
       (UserService.getUserById as jest.Mock).mockRejectedValue('Some unknown error');
 
-      req.params = {
-        id: '1',
-      };
       req.body = {
         birthdate: new Date().toDateString(),
         name: 'Test User',
         email: 'test@mail.com',
+        params: {
+          id: 1,
+        },
       };
 
       await userController.updateUser(req as Request, res as Response);
@@ -294,15 +206,15 @@ describe('userController', () => {
     });
 
     it('should return 200 when user is updated successfully', async () => {
-      req.params = {
-        id: '1',
-      };
       req.body = {
         name: 'Test User',
+        params: {
+          id: 1,
+        },
       };
       const userMock = {
         username: 'testuser',
-        name: 'test user',
+        name: 'Test User',
         email: 'test@user.com',
         birthdate: new Date('2000-01-01'),
         id: 1,
@@ -326,28 +238,9 @@ describe('userController', () => {
   });
 
   describe('getAllUsers', () => {
-    it('should return 400 if limit or offset are not numbers', async () => {
-      // (UserService.getAllUser as jest.Mock).mockRejectedValue('Some unknown error');
-      req.query = { limit: 'limit' };
-      await userController.getAllUsers(req as Request, res as Response);
-
-      expect(statusMock).toHaveBeenCalledWith(400);
-      expect(jsonMock).toHaveBeenCalledWith({
-        success: false,
-        message: 'Validation failed',
-        errors: expect.arrayContaining([
-          expect.objectContaining({
-            path: ['limit'],
-            code: 'custom',
-            message: 'Limit must be a positive integer',
-          }),
-        ]),
-      });
-    });
-
     it('should handle unknown errors gracefully', async () => {
       (UserService.getAllUser as jest.Mock).mockRejectedValue('Some unknown error');
-      req.query = { limit: '10', offset: '0' };
+      req.body.query = { limit: '10', offset: '0' };
       await userController.getAllUsers(req as Request, res as Response);
 
       expect(statusMock).toHaveBeenCalledWith(400);
@@ -359,7 +252,7 @@ describe('userController', () => {
 
     it('should return 400 when fails', async () => {
       (UserService.getAllUser as jest.Mock).mockRejectedValue(new Error('Some unknown error'));
-      req.query = { limit: '10', offset: '0' };
+      req.body.query = { limit: '10', offset: '0' };
       await userController.getAllUsers(req as Request, res as Response);
 
       expect(statusMock).toHaveBeenCalledWith(400);
@@ -383,7 +276,7 @@ describe('userController', () => {
         },
       };
 
-      req.query = { limit: '10', offset: '0' };
+      req.body.query = { limit: '10', offset: '0' };
       (UserService.getAllUser as jest.Mock).mockResolvedValue([userMock]);
       await userController.getAllUsers(req as Request, res as Response);
 

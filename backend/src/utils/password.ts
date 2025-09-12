@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import logger from './logger';
 
 /**
  * Utilities for password hashing and verification
@@ -47,10 +48,8 @@ export class PasswordUtils {
       const isMatch = await bcrypt.compare(plainPassword, hashedPassword);
       return isMatch;
     } catch (error) {
-      console.error(
-        'Error verifying password:',
-        error instanceof Error ? error.message : 'Unknown error',
-      );
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Error verifying password:' + ' ' + message);
       return false;
     }
   }

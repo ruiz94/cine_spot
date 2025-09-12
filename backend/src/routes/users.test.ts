@@ -1,5 +1,5 @@
 import request from 'supertest';
-import express from 'express';
+import express, { NextFunction } from 'express';
 import router from './users';
 
 const userMock = {
@@ -8,12 +8,15 @@ const userMock = {
   email: 'test@user.com',
   birthdate: '2000-01-01',
   id: 1,
-  role: 'USER',
+  role: 'ADMIN',
   reward: {
     totalPoints: 1,
     level: 'BRONZE',
   },
 };
+jest.mock('../middlewares', () => ({
+  requireRole: () => (req: Request, res: Response, next: NextFunction) => next(),
+}));
 //mock the userController
 jest.mock('../controllers', () => ({
   userController: {
@@ -60,8 +63,8 @@ describe('User Routes', () => {
   //   });
   // });
 
-  it('should call userController.getUserByID on GET /users/find/1', async () => {
-    const response = await request(app).get('/users/find/1');
+  it('should call userController.getUserByID on GET /users/1', async () => {
+    const response = await request(app).get('/users/1');
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
@@ -70,8 +73,8 @@ describe('User Routes', () => {
     });
   });
 
-  it('should call userController.getAllUsers on GET /users/getAll', async () => {
-    const response = await request(app).get('/users/getAll');
+  it('should call userController.getAllUsers on GET /users', async () => {
+    const response = await request(app).get('/users').query({ limit: 10, offset: 0 });
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
@@ -80,8 +83,8 @@ describe('User Routes', () => {
     });
   });
 
-  it('should call userController.updateUser on PUT /users/update/1', async () => {
-    const response = await request(app).put('/users/update/1');
+  it('should call userController.updateUser on PATCH /users/1', async () => {
+    const response = await request(app).patch('/users/1').send({ name: 'test' });
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
