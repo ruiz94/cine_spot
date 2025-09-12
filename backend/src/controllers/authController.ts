@@ -3,6 +3,7 @@ import { UserService } from '../services/userService';
 import { JWTUtils } from '../utils';
 import { JWTPayload } from '../utils/jwt';
 import { User } from '@prisma/client';
+import logger from '../utils/logger';
 
 const login = async (req: Request, res: Response) => {
   try {
@@ -22,10 +23,10 @@ const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    logger.error(message);
     return res.status(401).json({
       success: false,
       message: 'Authentication failed',
-      error: message,
     });
   }
 };

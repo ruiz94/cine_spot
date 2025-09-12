@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { UserService } from '../services/userService';
 import { createUserSchema, updateUserSchema } from '../utils/schemas/users';
 import { validateParamID, validateLimitOffset } from '../utils/schemas/generic';
+import logger from '../utils/logger';
 
 const createUser = async (req: Request, res: Response) => {
   const parseResult = createUserSchema.safeParse(req.body);
@@ -27,9 +28,11 @@ const createUser = async (req: Request, res: Response) => {
       user, // Do not include hashed password
     });
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    logger.error(message);
     return res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
+      message: 'Failed to create the user.',
     });
   }
 };
@@ -56,9 +59,11 @@ const getUserByID = async (req: Request, res: Response) => {
       user: userResponse,
     });
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    logger.error(message);
     return res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
+      message: 'Failed to get the user.',
     });
   }
 };
@@ -103,15 +108,11 @@ const updateUser = async (req: Request, res: Response) => {
       user: userUpdated,
     });
   } catch (error) {
-    const errorStatusMap: Record<string, number> = {
-      'Email already exists': 409,
-    };
-    const status =
-      error instanceof Error && errorStatusMap[error.message] ? errorStatusMap[error.message] : 400;
-
-    return res.status(status || 400).json({
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    logger.error(message);
+    return res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
+      message: 'Failed to update the user.',
     });
   }
 };
@@ -136,9 +137,11 @@ const getAllUsers = async (req: Request, res: Response) => {
       data: users,
     });
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    logger.error(message);
     return res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
+      message: 'Failed to get users.',
     });
   }
 };
