@@ -21,5 +21,5 @@ export const validateLimitOffset = z.object({
     .transform((val) => Number(val))
     .refine((val) => Number.isInteger(val) && val >= 0, {
       message: 'Offset must be a non-negative integer',
-    })
+    }),
 });

@@ -7,19 +7,20 @@ export class RoomService {
   /**
    * Crear un nuevo room
    */
-  static async createRoom ({ name, capacity }: {name: string, capacity: number}){
+  static async createRoom({ name, capacity }: { name: string; capacity: number }) {
     try {
       const room = await prisma.room.create({
         data: {
-          name, capacity
+          name,
+          capacity,
         },
         select: {
           id: true,
           name: true,
           capacity: true,
-          schedules: true
-        }
-      })
+          schedules: true,
+        },
+      });
       return room;
     } catch (error) {
       // Handle unique constraint errors (e.g., duplicate name)
@@ -37,7 +38,7 @@ export class RoomService {
   /**
    * getAll rooms
    */
-  static async getAll (limit = 20, offset = 0){
+  static async getAll(limit = 20, offset = 0) {
     try {
       const rooms = await prisma.room.findMany({
         skip: offset,
@@ -46,7 +47,7 @@ export class RoomService {
           id: true,
           name: true,
           capacity: true,
-          schedules: true
+          schedules: true,
         },
         orderBy: { id: 'asc' },
       });
@@ -58,22 +59,49 @@ export class RoomService {
   }
 
   /**
-   * Update un room
+   * get room by id
    */
-  static async updateRoom (roomID: number, capacity: number){
+  static async getRoomByID(roomID: number) {
     try {
-      const room = await prisma.room.update({
-        where: { id: roomID },
-        data: {
-          capacity
+      const room = await prisma.room.findUnique({
+        where: {
+          id: roomID,
         },
         select: {
           id: true,
           name: true,
           capacity: true,
-          schedules: true
-        }
-      })
+          schedules: true,
+        },
+      });
+
+      if (!room) {
+        throw new Error('Room not found');
+      }
+      return room;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Failed to get the room: ${errorMessage}`);
+    }
+  }
+
+  /**
+   * Update un room
+   */
+  static async updateRoom(roomID: number, capacity: number) {
+    try {
+      const room = await prisma.room.update({
+        where: { id: roomID },
+        data: {
+          capacity,
+        },
+        select: {
+          id: true,
+          name: true,
+          capacity: true,
+          schedules: true,
+        },
+      });
       return room;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -84,11 +112,11 @@ export class RoomService {
   /**
    * Eliminar un room
    */
-  static async deleteRoom (roomID: number){
+  static async deleteRoom(roomID: number) {
     try {
       const room = await prisma.room.delete({
         where: { id: roomID },
-      })
+      });
       return room;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';

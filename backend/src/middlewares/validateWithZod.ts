@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 
 export function validateWithZod<T>(
   schema: ZodSchema<T>,
-  property: 'body' | 'params' | 'query' = 'body'
+  property: 'body' | 'params' | 'query' = 'body',
 ) {
   return (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req[property]);
@@ -16,11 +16,11 @@ export function validateWithZod<T>(
     }
     if (property === 'query') {
       Object.assign(req.query, result.data);
-      req.body = { ...req.body, query: result.data }
-    } else if(property === 'params'){
-        req.body = { ...req.body, params: result.data }
+      req.body = { ...req.body, query: result.data };
+    } else if (property === 'params') {
+      req.body = { ...req.body, params: result.data };
     } else {
-      req[property] = { ...req.body, ...result.data }
+      req[property] = { ...req.body, ...result.data };
     }
     next();
   };

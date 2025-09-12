@@ -143,7 +143,7 @@ describe('userController', () => {
     });
 
     it('should return error when user is not found', async () => {
-      (UserService.getUserById as jest.Mock).mockResolvedValue(undefined)
+      (UserService.getUserById as jest.Mock).mockResolvedValue(undefined);
 
       req.params = {
         id: '1',
@@ -347,7 +347,7 @@ describe('userController', () => {
 
     it('should handle unknown errors gracefully', async () => {
       (UserService.getAllUser as jest.Mock).mockRejectedValue('Some unknown error');
-      req.query = { limit: '10', offset: '0'};
+      req.query = { limit: '10', offset: '0' };
       await userController.getAllUsers(req as Request, res as Response);
 
       expect(statusMock).toHaveBeenCalledWith(400);
@@ -359,7 +359,7 @@ describe('userController', () => {
 
     it('should return 400 when fails', async () => {
       (UserService.getAllUser as jest.Mock).mockRejectedValue(new Error('Some unknown error'));
-      req.query = { limit: '10', offset: '0'};
+      req.query = { limit: '10', offset: '0' };
       await userController.getAllUsers(req as Request, res as Response);
 
       expect(statusMock).toHaveBeenCalledWith(400);
@@ -383,7 +383,7 @@ describe('userController', () => {
         },
       };
 
-      req.query = { limit: '10', offset: '0'};
+      req.query = { limit: '10', offset: '0' };
       (UserService.getAllUser as jest.Mock).mockResolvedValue([userMock]);
       await userController.getAllUsers(req as Request, res as Response);
 
