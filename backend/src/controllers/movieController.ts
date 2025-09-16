@@ -115,7 +115,7 @@ const deleteMovie = async (req: Request, res: Response) => {
   } catch (error) {
     if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2025') {
       logger.error({ message: 'No movie found to delete.', code: error.code });
-      return res.status(409).json({ success: false, message: 'No movie found to delete.' });
+      return res.status(404).json({ success: false, message: 'No movie found to delete.' });
     }
 
     const message = error instanceof Error ? error.message : 'deleteMovie: Unknown error';

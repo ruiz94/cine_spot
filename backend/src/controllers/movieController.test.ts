@@ -332,7 +332,7 @@ describe('movieController', () => {
       expect(statusMock).toHaveBeenCalledWith(204);
     });
 
-    it('should return status 409 error when movie is not found to delete', async () => {
+    it('should return status 404 error when movie is not found to delete', async () => {
       (MovieService.deleteMovie as jest.Mock).mockRejectedValue({
         code: 'P2025',
         message: 'Name already exists',
@@ -343,7 +343,7 @@ describe('movieController', () => {
 
       await movieController.deleteMovie(req as Request, res as Response);
 
-      expect(statusMock).toHaveBeenCalledWith(409);
+      expect(statusMock).toHaveBeenCalledWith(404);
       expect(jsonMock).toHaveBeenCalledWith({
         success: false,
         message: 'No movie found to delete.',
