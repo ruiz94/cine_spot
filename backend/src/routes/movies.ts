@@ -24,12 +24,18 @@ router.get('/:id', validateWithZod(validateParamID, 'params'), movieController.g
 //Update a movie
 router.patch(
   '/:id',
+  requireRole(['ADMIN']),
   validateWithZod(validateParamID, 'params'),
   validateWithZod(updateMovieSchema, 'body'),
   movieController.updateMovie,
 );
 
 //Delete a movie
-router.delete('/:id', validateWithZod(validateParamID, 'params'), movieController.deleteMovie);
+router.delete(
+  '/:id',
+  requireRole(['ADMIN']),
+  validateWithZod(validateParamID, 'params'),
+  movieController.deleteMovie,
+);
 
 export default router;
