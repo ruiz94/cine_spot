@@ -92,7 +92,7 @@ const updateMovie = async (req: Request, res: Response) => {
       data: updateMovie,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'getMovieByID: Unknown error';
+    const message = error instanceof Error ? error.message : 'updateMovie: Unknown error';
     if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2002') {
       logger.error({ message: 'Name already exists', code: error.code });
       return res.status(409).json({ success: false, message: 'Name already exists.' });
@@ -118,7 +118,7 @@ const deleteMovie = async (req: Request, res: Response) => {
       return res.status(409).json({ success: false, message: 'No movie found to delete.' });
     }
 
-    const message = error instanceof Error ? error.message : 'getMovieByID: Unknown error';
+    const message = error instanceof Error ? error.message : 'deleteMovie: Unknown error';
     logger.error(message);
     return res.status(400).json({
       success: false,
