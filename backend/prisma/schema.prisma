@@ -30,6 +30,18 @@ enum TransactionType {
   REDEEMED // Puntos usados/canjeados
 }
 
+enum DiscountMethod {
+  PERCENTAGE
+  FIXED
+  POINTS
+}
+
+enum DiscountType {
+  BIRTHDAY
+  SEASONAL
+  POINTS
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
@@ -133,13 +145,13 @@ model Schedule {
 }
 
 model Discount {
-  id           Int     @id @default(autoincrement())
-  name         String //"Cumpleaños 50%", "Promoción Verano", "Puntos Rewards"
-  type         String // birthday, seasonal, points
-  description  String?
-  discount     Float
-  isActive     Boolean @default(true)
-  discountType String // percentage, fixed, points
+  id             Int            @id @default(autoincrement())
+  name           String //"Cumpleaños 50%", "Promoción Verano", "Puntos Rewards"
+  type           DiscountType // birthday, seasonal, points
+  description    String?
+  discount       Float
+  isActive       Boolean        @default(true)
+  discountMethod DiscountMethod // percentage, fixed, points
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
