@@ -87,7 +87,7 @@ model Schedule {
 
 model Discount {
   id             Int            @id @default(autoincrement())
-  name           String
+  name           String         @unique
   description    String?
   discount       Float
   isActive       Boolean        @default(true)
