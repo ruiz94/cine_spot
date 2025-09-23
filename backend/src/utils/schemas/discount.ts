@@ -32,9 +32,8 @@ export const discountSchema = z
   .superRefine(validDiscountPercentage);
 
 export type createDiscount = z.infer<typeof createDiscountSchema>;
-export const createDiscountSchema = discountSchema
-  .omit({ isActive: true })
-  .superRefine(validDiscountPercentage);
+export const createDiscountSchema = discountSchema.omit({ isActive: true });
+
 export const updateDiscountSchema = discountSchema
   .omit({ type: true })
   .partial()
