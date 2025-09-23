@@ -20,19 +20,19 @@ const validDiscountPercentage = <T extends { discount: number; discountMethod: s
 };
 
 //Schema
-export const discountSchema = z
-  .object({
-    name: z.string().min(5, 'Name is required.'),
-    type: DiscountTypeEnum,
-    description: z.string().min(5, 'Description is required.'),
-    discount: z.number(),
-    isActive: z.boolean(),
-    discountMethod: DiscountMethodEnum,
-  })
-  .superRefine(validDiscountPercentage);
+export const discountSchema = z.object({
+  name: z.string().min(5, 'Name is required.'),
+  type: DiscountTypeEnum,
+  description: z.string().min(5, 'Description is required.'),
+  discount: z.number(),
+  isActive: z.boolean(),
+  discountMethod: DiscountMethodEnum,
+});
 
 export type createDiscount = z.infer<typeof createDiscountSchema>;
-export const createDiscountSchema = discountSchema.omit({ isActive: true });
+export const createDiscountSchema = discountSchema
+  .omit({ isActive: true })
+  .superRefine(validDiscountPercentage);
 
 export const updateDiscountSchema = discountSchema
   .omit({ type: true })
