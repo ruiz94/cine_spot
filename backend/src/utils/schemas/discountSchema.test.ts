@@ -2,7 +2,7 @@
 import { updateDiscountSchema, createDiscountSchema } from './discount';
 
 describe('createDiscountSchema', () => {
-  it('should fails if there is no fields', () => {
+  it('should fail if there are no fields', () => {
     const result = createDiscountSchema.safeParse({});
     expect(result.success).toBe(false);
   });

@@ -8,7 +8,7 @@ const validDiscountPercentage = <T extends { discount: number; discountMethod: s
   data: T,
   ctx: z.RefinementCtx,
 ) => {
-  //Valida rango solo si es porcentaje
+  // Validates range only if it's a percentage
 
   if (data.discountMethod === 'PERCENTAGE' && (data.discount < 0 || data.discount > 1)) {
     ctx.addIssue({
@@ -39,7 +39,7 @@ export const updateDiscountSchema = discountSchema
   .omit({ type: true })
   .partial()
   .superRefine((data, ctx) => {
-    // Solo valida si ambos campos están presentes
+    // Only validates if both fields are present
     if (data.discountMethod === 'PERCENTAGE') {
       if (typeof data.discount !== 'number' || data.discount < 0 || data.discount > 1) {
         ctx.addIssue({
@@ -49,7 +49,7 @@ export const updateDiscountSchema = discountSchema
         });
       }
     }
-    // Si uno está presente y el otro no, error
+    // If one is present and the other is not, error
     if (
       (data.discount !== undefined && data.discountMethod === undefined) ||
       (data.discount === undefined && data.discountMethod !== undefined)
@@ -61,7 +61,7 @@ export const updateDiscountSchema = discountSchema
           "Both 'discount' and 'discountMethod' fields are required together when updating the discount.",
       });
     }
-    // Al menos un campo debe estar presente
+    // At least one field must be present
     if (
       data.name === undefined &&
       data.description === undefined &&
