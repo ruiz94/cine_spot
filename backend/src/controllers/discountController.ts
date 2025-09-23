@@ -12,20 +12,20 @@ const createDiscount = async (req: Request, res: Response) => {
       discount,
       discountMethod,
     });
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: discountResponse,
     });
   } catch (error) {
     if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2002') {
-      res.status(409).json({
+      return res.status(409).json({
         success: false,
         message: 'Discount already exists.',
       });
     }
     const message = error instanceof Error ? error.message : 'createDiscount: Unknown error.';
     logger.error(message);
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       message: 'Failed to create the discount.',
     });
