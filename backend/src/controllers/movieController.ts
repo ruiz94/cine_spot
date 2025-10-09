@@ -58,6 +58,10 @@ const getMovieByID = async (req: Request, res: Response) => {
     const movieID = req.body.params.id;
     const movie = await MovieService.getMovieByID(movieID);
 
+    if (!movie) {
+      return res.status(404).json({ success: false, message: 'Movie not found.' });
+    }
+
     return res.status(200).json({
       success: true,
       data: movie,

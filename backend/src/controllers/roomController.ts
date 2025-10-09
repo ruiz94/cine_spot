@@ -48,6 +48,10 @@ const getRoomByID = async (req: Request, res: Response) => {
     const roomID = req.body.params.id;
     const room = await RoomService.getRoomByID(roomID);
 
+    if (!room) {
+      return res.status(404).json({ success: false, message: 'Room not found.' });
+    }
+
     return res.status(200).json({
       success: true,
       message: 'Room fetched successfully',
