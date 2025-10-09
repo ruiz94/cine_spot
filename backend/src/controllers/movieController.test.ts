@@ -207,6 +207,23 @@ describe('movieController', () => {
         message: 'Failed to get the movie.',
       });
     });
+
+    it('should return status 400 error when movie is not found', async () => {
+      (MovieService.getMovieByID as jest.Mock).mockReturnValue(null);
+      req.body = {
+        params: {
+          id: 1,
+        }
+      };
+
+      await movieController.getMovieByID(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(404);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: false,
+        message: 'Movie not found.',
+      });
+    });
   });
 
   describe('updateMovie', () => {
