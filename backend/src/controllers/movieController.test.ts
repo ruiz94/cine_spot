@@ -213,7 +213,7 @@ describe('movieController', () => {
       req.body = {
         params: {
           id: 1,
-        }
+        },
       };
 
       await movieController.getMovieByID(req as Request, res as Response);

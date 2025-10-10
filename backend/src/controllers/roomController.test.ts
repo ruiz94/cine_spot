@@ -326,20 +326,20 @@ describe('roomController', () => {
     });
 
     it('should return status 400 error when room is not found', async () => {
-          (RoomService.getRoomByID as jest.Mock).mockReturnValue(null);
-          req.body = {
-            params: {
-              id: 1,
-            }
-          };
-    
-          await roomController.getRoomByID(req as Request, res as Response);
-    
-          expect(statusMock).toHaveBeenCalledWith(404);
-          expect(jsonMock).toHaveBeenCalledWith({
-            success: false,
-            message: 'Room not found.',
-          });
-        });
+      (RoomService.getRoomByID as jest.Mock).mockReturnValue(null);
+      req.body = {
+        params: {
+          id: 1,
+        },
+      };
+
+      await roomController.getRoomByID(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(404);
+      expect(jsonMock).toHaveBeenCalledWith({
+        success: false,
+        message: 'Room not found.',
+      });
+    });
   });
 });
