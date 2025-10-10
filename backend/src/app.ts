@@ -1,7 +1,14 @@
 import express from 'express';
 
 //Import Routes
-import { userRoutes, authRoutes, roomsRoutes, moviesRoutes, discountRouter } from './routes';
+import {
+  userRoutes,
+  authRoutes,
+  roomsRoutes,
+  moviesRoutes,
+  discountRoutes,
+  pointsTransactionRoutes,
+} from './routes';
 
 //Import middlewares
 import { authenticateToken } from './middlewares';
@@ -19,6 +26,7 @@ app.use(authenticateToken);
 app.use('/users', userRoutes);
 app.use('/rooms', roomsRoutes);
 app.use('/movies', moviesRoutes);
-app.use('/discount', discountRouter);
+app.use('/discount', discountRoutes);
+app.use('/transaction', pointsTransactionRoutes);
 
 export default app;
