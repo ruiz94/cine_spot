@@ -131,7 +131,7 @@ describe('ScheduleService', () => {
       expect(prisma.schedule.update).not.toHaveBeenCalled();
     });
 
-    it('should throw error when', async () => {
+    it('should throw error when service fails', async () => {
       (prisma.schedule.findFirst as jest.Mock).mockRejectedValue(new Error('DB error'));
 
       await expect(ScheduleService.update(scheduleId, time, roomId, movieId)).rejects.toThrow(
