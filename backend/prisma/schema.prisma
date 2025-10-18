@@ -72,7 +72,7 @@ model Movie {
 
 model Schedule {
   id         Int      @id @default(autoincrement())
-  startTime  DateTime
+  startTime  String
   roomId     Int
   soldAmount Int      @default(0)
   movieId    Int
@@ -82,6 +82,7 @@ model Schedule {
   room       Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
   tickets    Ticket[]
 
+  @@unique([startTime, roomId, movieId])
   @@map("schedules")
 }
 
