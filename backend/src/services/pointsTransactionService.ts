@@ -1,7 +1,7 @@
-import { TransactionType } from '@prisma/client';
+import { TransactionType, Prisma } from '@prisma/client';
 import { prisma } from '../config';
 
-export class PointsTransactionService {
+export default class PointsTransactionService {
   static async create(userId: number, points: number, type: TransactionType, description: string) {
     try {
       if (!userId || !points || !type || !description) {
@@ -52,5 +52,27 @@ export class PointsTransactionService {
       const message = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(`Failed to get the transactions: ${message}`);
     }
+  }
+
+  static async createWithTransaction(
+    tx: Prisma.TransactionClient,
+    userId: number,
+    points: number,
+    type: TransactionType,
+    description: string,
+  ) {
+    if (!userId || !points || !type || !description) {
+      throw new Error('Invalid point transaction data.');
+    }
+
+    const response = await tx.pointTransaction.create({
+      data: {
+        userId,
+        type,
+        points,
+        description,
+      },
+    });
+    return response;
   }
 }

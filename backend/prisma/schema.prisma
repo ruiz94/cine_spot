@@ -101,17 +101,17 @@ model Discount {
 }
 
 model Ticket {
-  id         Int      @id @default(autoincrement())
+  id         Int          @id @default(autoincrement())
   userId     Int
-  status     String
+  status     TicketStatus
   seatNumber String
   basePrice  Float
   discountId Int?
   total      Float
   scheduleId Int
-  createdAt  DateTime @default(now()) @map("created_at")
-  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime     @default(now()) @map("created_at")
+  schedule   Schedule     @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("tickets")
 }
@@ -143,4 +143,11 @@ enum DiscountType {
   BIRTHDAY
   SEASONAL
   POINTS
+}
+
+enum TicketStatus {
+  SOLD
+  EXPIRED
+  REDEEMED
+  CANCELLED
 }

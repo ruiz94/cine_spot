@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from '../config';
 
 export default class ScheduleService {
@@ -112,5 +113,49 @@ export default class ScheduleService {
       const message = error instanceof Error ? error.message : 'ScheduleService: Unknown error';
       throw new Error(`Failed to delete the schedule: ${message}`);
     }
+  }
+
+  static async updateSoldAmountWithTransaction(
+    tx: Prisma.TransactionClient,
+    scheduleID: number,
+    ticketAmount: number,
+  ) {
+    const currentSchedule = await tx.schedule.findUnique({
+      where: {
+        id: scheduleID,
+      },
+      include: {
+        tickets: {
+          where: {
+            status: { not: 'CANCELLED' },
+          },
+        },
+        room: true,
+      },
+    });
+
+    if (!currentSchedule) {
+      throw new Error('Schedule not found.');
+    }
+
+    const newSoldAmount = currentSchedule.soldAmount + ticketAmount;
+    if (newSoldAmount > currentSchedule.room.capacity) {
+      throw new Error('There is not enough capacity.');
+    }
+
+    const response = await tx.schedule.update({
+      where: {
+        id: scheduleID,
+      },
+      data: {
+        soldAmount: { increment: ticketAmount },
+      },
+      include: {
+        movie: true,
+        room: true,
+      },
+    });
+
+    return response;
   }
 }

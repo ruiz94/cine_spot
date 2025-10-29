@@ -9,6 +9,7 @@ import {
   discountRoutes,
   pointsTransactionRoutes,
   schedulesRoutes,
+  ticketsRoutes,
 } from './routes';
 
 //Import middlewares
@@ -30,5 +31,6 @@ app.use('/movies', moviesRoutes);
 app.use('/discount', discountRoutes);
 app.use('/transaction', pointsTransactionRoutes);
 app.use('/schedules', schedulesRoutes);
+app.use('/tickets', ticketsRoutes);
 
 export default app;
