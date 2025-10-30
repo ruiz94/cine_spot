@@ -31,7 +31,7 @@ describe('TicketPurchaseUtil', () => {
       expect(newLevel2).not.toBe('BRONZE');
     });
 
-    it('should return SILVER if totalPoints is grater or equal than 1000 but less than 5000', () => {
+    it('should return SILVER if totalPoints is greater or equal than 1000 but less than 5000', () => {
       const newLevel1 = TicketPurchaseUtil.calculateNewLevel(1000);
       const newLevel2 = TicketPurchaseUtil.calculateNewLevel(4999);
       const newLevel3 = TicketPurchaseUtil.calculateNewLevel(5000);
@@ -40,7 +40,7 @@ describe('TicketPurchaseUtil', () => {
       expect(newLevel3).not.toBe('SILVER');
     });
 
-    it('should return GOLD if totalPoints is grater or equal than 5000 but less than 10000', () => {
+    it('should return GOLD if totalPoints is greater or equal than 5000 but less than 10000', () => {
       const newLevel1 = TicketPurchaseUtil.calculateNewLevel(5000);
       const newLevel2 = TicketPurchaseUtil.calculateNewLevel(9999);
       const newLevel3 = TicketPurchaseUtil.calculateNewLevel(10000);
@@ -49,7 +49,7 @@ describe('TicketPurchaseUtil', () => {
       expect(newLevel3).not.toBe('GOLD');
     });
 
-    it('should return PLATINUM if totalPoints is grater or equal than 10000', () => {
+    it('should return PLATINUM if totalPoints is greater or equal than 10000', () => {
       const newLevel1 = TicketPurchaseUtil.calculateNewLevel(10000);
       const newLevel2 = TicketPurchaseUtil.calculateNewLevel(9999);
       expect(newLevel1).toBe('PLATINUM');

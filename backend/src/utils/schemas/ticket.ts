@@ -11,7 +11,7 @@ export const TicketSchema = z.object({
   basePrice: z
     .number()
     .positive('Base price must be greater than 0')
-    .max(500, 'Base price cannot exceed $1000'),
+    .max(500, 'Base price cannot exceed $500'),
 
   discountId: z
     .number()
