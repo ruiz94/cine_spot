@@ -1,5 +1,5 @@
 import pointsTransactionController from './pointsTransactionController';
-import { PointsTransactionService } from '../services/pointsTransactionService';
+import PointsTransactionService from '../services/pointsTransactionService';
 import { Response, Request } from 'express';
 
 jest.mock('../services/pointsTransactionService');

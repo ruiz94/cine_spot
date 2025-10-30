@@ -1,5 +1,6 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from '../config';
-import { PointsTransactionService } from './pointsTransactionService';
+import PointsTransactionService from './pointsTransactionService';
 
 jest.mock('../config', () => ({
   prisma: {
@@ -9,6 +10,12 @@ jest.mock('../config', () => ({
     },
   },
 }));
+
+const mockTx = {
+  pointTransaction: {
+    create: jest.fn(),
+  },
+} as unknown as Prisma.TransactionClient;
 
 describe('PointsTransactionService', () => {
   const mockData = {
@@ -103,6 +110,39 @@ describe('PointsTransactionService', () => {
       await expect(PointsTransactionService.getUserPointHistory(1)).rejects.toThrow(
         'Failed to get the transactions: Unknown error',
       );
+    });
+  });
+
+  describe('createWithTransaction', () => {
+    it('should create a points transaction successfully', async () => {
+      (mockTx.pointTransaction.create as jest.Mock).mockResolvedValue(mockData);
+
+      const response = await PointsTransactionService.createWithTransaction(
+        mockTx,
+        1,
+        10,
+        'EARNED',
+        'Test data',
+      );
+
+      expect(response).toBe(mockData);
+      expect(mockTx.pointTransaction.create).toHaveBeenCalledWith({
+        data: {
+          userId: 1,
+          type: 'EARNED',
+          points: 10,
+          description: 'Test data',
+        },
+      });
+    });
+
+    it('should throw an error when params are not passed', async () => {
+      (mockTx.pointTransaction.create as jest.Mock).mockResolvedValue(mockData);
+
+      await expect(
+        PointsTransactionService.createWithTransaction(mockTx, 1, 0, 'EARNED', ''),
+      ).rejects.toThrow(/Invalid point transaction data/);
+      expect(mockTx.pointTransaction.create).not.toHaveBeenCalled();
     });
   });
 });

@@ -5,3 +5,4 @@ export { default as moviesRoutes } from './movies';
 export { default as discountRoutes } from './discount';
 export { default as pointsTransactionRoutes } from './pointsTransaction';
 export { default as schedulesRoutes } from './schedules';
+export { default as ticketsRoutes } from './tickets';

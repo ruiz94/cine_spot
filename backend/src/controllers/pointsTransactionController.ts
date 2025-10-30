@@ -1,4 +1,4 @@
-import { PointsTransactionService } from '../services/pointsTransactionService';
+import PointsTransactionService from '../services/pointsTransactionService';
 import logger from '../utils/logger';
 import { Request, Response } from 'express';
 

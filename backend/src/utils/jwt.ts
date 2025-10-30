@@ -1,8 +1,10 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { env } from '../config/env';
-import { User } from '@prisma/client';
+import { User, Reward } from '@prisma/client';
 
-export interface JWTPayload extends Omit<User, 'password'> {}
+export interface JWTPayload extends Omit<User, 'password'> {
+  reward: Reward;
+}
 
 export class JWTUtils {
   /**

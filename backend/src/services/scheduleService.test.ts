@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from '../config';
 import ScheduleService from './scheduleService';
 
@@ -13,6 +14,14 @@ jest.mock('../config', () => ({
   },
 }));
 
+const mockTx = {
+  schedule: {
+    update: jest.fn(),
+    findUnique: jest.fn(),
+    findFirst: jest.fn(),
+  },
+} as unknown as Prisma.TransactionClient;
+
 const mockSchedule = {
   id: 1,
   startTime: '2:00 PM',
@@ -20,6 +29,9 @@ const mockSchedule = {
   soldAmount: 0,
   movieId: 10,
   tickets: [{}],
+  room: {
+    capacity: 1,
+  },
 };
 
 describe('ScheduleService', () => {
@@ -222,6 +234,56 @@ describe('ScheduleService', () => {
       expect(response).toBe(mockSchedule);
       expect(prisma.schedule.delete).toHaveBeenCalledWith({
         where: { id: scheduleId },
+      });
+    });
+  });
+
+  describe('updateSoldAmountWithTransaction', () => {
+    it('should throw an error when schedule is not found', async () => {
+      (mockTx.schedule.findUnique as jest.Mock).mockReturnValue(null);
+
+      await expect(
+        ScheduleService.updateSoldAmountWithTransaction(mockTx, scheduleId, 1),
+      ).rejects.toThrow(/Schedule not found./);
+      expect(mockTx.schedule.findUnique).toHaveBeenCalledWith({
+        where: { id: scheduleId },
+        include: {
+          tickets: {
+            where: {
+              status: { not: 'CANCELLED' },
+            },
+          },
+          room: true,
+        },
+      });
+      expect(mockTx.schedule.update).not.toHaveBeenCalled();
+    });
+
+    it('should throw an error when there is not enough capacity', async () => {
+      (mockTx.schedule.findUnique as jest.Mock).mockReturnValue(mockSchedule);
+
+      await expect(
+        ScheduleService.updateSoldAmountWithTransaction(mockTx, scheduleId, 2),
+      ).rejects.toThrow(/There is not enough capacity./);
+      expect(mockTx.schedule.update).not.toHaveBeenCalled();
+    });
+
+    it('should update the schedule successfully', async () => {
+      mockSchedule.tickets = [];
+      (mockTx.schedule.findUnique as jest.Mock).mockReturnValue(mockSchedule);
+      (mockTx.schedule.update as jest.Mock).mockReturnValue(mockSchedule);
+
+      const response = await ScheduleService.updateSoldAmountWithTransaction(mockTx, scheduleId, 1);
+      expect(response).toBe(mockSchedule);
+      expect(mockTx.schedule.update).toHaveBeenCalledWith({
+        where: { id: scheduleId },
+        data: {
+          soldAmount: { increment: 1 },
+        },
+        include: {
+          movie: true,
+          room: true,
+        },
       });
     });
   });
