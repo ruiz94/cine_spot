@@ -123,11 +123,11 @@ const movies = await fetch('/movies?limit=10&offset=0');
 
 // Create a movie
 const movieCreated = await fetch('/movies', {
-  method: 'POST',
-  body: JSON.stringify({
-    name: "Harry Potter and the Philosopher's Stone",
-    minutes: 152,
-    category: "A"
+   method: 'POST',
+   body: JSON.stringify({
+      name: "Harry Potter and the Philosopher's Stone",
+      minutes: 152,
+      category: "A"
    })
 });
 ```
