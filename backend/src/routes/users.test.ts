@@ -15,7 +15,7 @@ const userMock = {
   },
 };
 jest.mock('../middlewares', () => ({
-  requireRole: () => (req: Request, res: Response, next: NextFunction) => next(),
+  requireRole: () => (_req: Request, _res: Response, next: NextFunction) => next(),
 }));
 //mock the userController
 jest.mock('../controllers', () => ({

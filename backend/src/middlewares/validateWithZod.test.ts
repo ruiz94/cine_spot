@@ -12,7 +12,7 @@ describe('validateWithZod', () => {
     app.get(
       '/protected',
       validateWithZod(validateParamID, 'params'),
-      (req: Request, res: Response) => {
+      (_: Request, res: Response) => {
         res.status(200).json({ message: 'Access granted' });
       },
     );

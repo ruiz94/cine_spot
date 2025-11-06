@@ -22,6 +22,6 @@ export function validateWithZod<T>(
     } else {
       req[property] = { ...req.body, ...result.data };
     }
-    next();
+    return next();
   };
 }
