@@ -11,7 +11,7 @@ app.use(express.json());
 
 describe('authenticateToken Middleware', () => {
   //example protected route
-  app.get('/protected', authenticateToken, (req: Request, res: Response) => {
+  app.get('/protected', authenticateToken, (_: Request, res: Response) => {
     res.status(200).json({ message: 'Access granted' });
   });
 

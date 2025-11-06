@@ -6,7 +6,7 @@ describe('Routes index exports', () => {
     expect(middleware.authenticateToken).toBe(authMiddleware.authenticateToken);
   });
   it('should export opcionalAuth from ./auth', () => {
-    expect(middleware.opcionalAuth).toBe(authMiddleware.opcionalAuth);
+    expect(middleware.optionalAuth).toBe(authMiddleware.optionalAuth);
   });
   it('should export requireRole from ./auth', () => {
     expect(middleware.requireRole).toBe(authMiddleware.requireRole);
