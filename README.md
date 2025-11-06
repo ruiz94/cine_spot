@@ -99,36 +99,36 @@ CineSpot is a comprehensive cinema ticket managing platform that allows users to
 ### Main functionalities
 
 ```bash
-# Get movie showtimes
-GET /api/movies/showtimes?date=2025-07-19
+# Get movies
+GET /movies?limit=10&offset=0
 
-# Book tickets
-POST /api/bookings
+# Get a movie
+GET /movies/2
+
+# Create a movie
+POST /movies
 {
-  "showtimeId": "123",
-  "seats": ["A1", "A2"],
-  "customerInfo": {...}
+  "name": "Movie name",
+  "minutes": 120,
+  "category": "Category movie"
 }
-
-# Get booking details
-GET /api/bookings/:bookingId
 
 ```
 
 ### Usage examples
 
 ```javascript
-// Get available showtimes
-const showtimes = await fetch('/api/movies/showtimes?movieId=123');
+// Get movies
+const movies = await fetch('/movies?limit=10&offset=0');
 
-// Create a booking
-const booking = await fetch('/api/bookings', {
-  method: 'POST',
-  body: JSON.stringify({
-    showtimeId: '456',
-    seats: ['B5', 'B6'],
-    customerEmail: 'user@example.com'
-  })
+// Create a movie
+const movieCreated = await fetch('/movies', {
+   method: 'POST',
+   body: JSON.stringify({
+      name: "Harry Potter and the Philosopher's Stone",
+      minutes: 152,
+      category: "A"
+   })
 });
 ```
 
@@ -159,52 +159,6 @@ const booking = await fetch('/api/bookings', {
 - **Husky** - Git hooks
 - **Typescript** - 
 
-## 📁 Project Structure
-
-```
-cine_spot/                 # Monorepo root
-├── frontend/              # Frontend application (Vite + React)
-│   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   │   ├── common/    # Common UI components
-│   │   │   ├── booking/   # Booking-related components
-│   │   │   └── admin/     # Admin dashboard components
-│   │   ├── pages/         # Application pages
-│   │   │   ├── movies/    # Movie listing and details
-│   │   │   ├── booking/   # Booking flow pages
-│   │   │   └── admin/     # Admin panel pages
-│   │   ├── hooks/         # Custom hooks
-│   │   ├── store/         # Zustand store configuration
-│   │   ├── utils/         # Utility functions
-│   │   ├── types/         # TypeScript definitions
-│   │   ├── lib/           # External library configurations
-│   │   └── styles/        # Global styles
-│   ├── public/            # Static files
-│   ├── tests/             # Frontend tests
-│   ├── .env.example       # Frontend environment variables
-│   ├── package.json       # Frontend dependencies
-│   ├── vite.config.ts     # Vite configuration
-│   └── tsconfig.json      # TypeScript configuration
-├── backend/               # Backend application (Node.js + Express)
-│   ├── src/
-│   │   ├── controllers/   # Route controllers
-│   │   ├── middlewares/   # Express middlewares
-│   │   ├── models/        # Database models
-│   │   ├── routes/        # API routes
-│   │   ├── services/      # Business logic
-│   │   ├── utils/         # Utility functions
-│   │   ├── types/         # TypeScript definitions
-│   │   └── config/        # Configuration files
-│   ├── prisma/            # Database schema and migrations
-│   ├── tests/             # Backend tests
-│   ├── .env.example       # Backend environment variables
-│   ├── package.json       # Backend dependencies
-│   └── tsconfig.json      # TypeScript configuration
-├── docs/                  # Shared documentation
-├── package.json           # Root package.json for monorepo scripts
-└── README.md             # This file
-```
-
 ## 🧪 Testing
 
 ```bash
@@ -220,13 +174,13 @@ npm run test:coverage:backend
 ## 📝 Roadmap
 
 - [x] **v1.0** - Core Features
-  - [] Movie catalog
-  - [] Seat selection
+  - [x] Movie catalog
+  - [x] Seat selection
   - [ ] Payment processing
-  - [ ] User authentication
+  - [x] User authentication
 
-- [ ] **v1.1** - Enhanced Features
-  - [ ] Loyalty program
+- [x] **v1.1** - Enhanced Features
+  - [x] Loyalty program
   - [ ] Group bookings
 
 - [ ] **v2.0** - Advanced Features
