@@ -1,5 +1,5 @@
 import pino from 'pino';
-import { isProduction } from '@/config';
+import { isProduction } from '../config';
 
 const logger = pino(
   isProduction
