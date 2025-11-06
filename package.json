@@ -1,0 +1,19 @@
+{
+  "name": "cine_spot",
+  "version": "1.0.0",
+  "description": "A modern application to sell Cinema tickets.",
+  "main": "index.js",
+  "scripts": {
+    "dev:backend": "nodemon --watch backend --exec \"cd backend && npm run dev\"",
+    "test:backend": "cd backend && npm run test",
+    "test:watch:backend": "cd backend && npm run test:watch",
+    "test:coverage:backend": "cd backend && npm run test:coverage",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:fix:backend": "cd backend && npm run lint:fix",
+    "format:backend": "cd backend && npm run format",
+    "format:fix:backend": "cd backend && npm run format:fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

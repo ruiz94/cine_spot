@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int                @id @default(autoincrement())
+  username          String             @unique
+  name              String
+  email             String             @unique
+  password          String
+  birthdate         DateTime
+  role              Role               @default(USER)
+  createdAt         DateTime           @default(now()) @map("created_at")
+  pointTransactions PointTransaction[]
+  reward            Reward?
+  tickets           Ticket[]
+
+  @@map("users")
+}
+
+model Reward {
+  id          Int         @id @default(autoincrement())
+  userId      Int         @unique
+  totalPoints Int         @default(0)
+  level       RewardLevel @default(BRONZE)
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("rewards")
+}
+
+model PointTransaction {
+  id          Int             @id @default(autoincrement())
+  userId      Int
+  type        TransactionType
+  points      Int
+  description String?
+  createdAt   DateTime        @default(now()) @map("created_at")
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("point_transactions")
+}
+
+model Room {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  capacity  Int
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  schedules Schedule[]
+
+  @@map("rooms")
+}
+
+model Movie {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  minutes   Int
+  category  String
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  schedules Schedule[]
+
+  @@map("movies")
+}
+
+model Schedule {
+  id         Int      @id @default(autoincrement())
+  startTime  String
+  roomId     Int
+  soldAmount Int      @default(0)
+  movieId    Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  movie      Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  room       Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  tickets    Ticket[]
+
+  @@unique([startTime, roomId, movieId])
+  @@map("schedules")
+}
+
+model Discount {
+  id             Int            @id @default(autoincrement())
+  name           String         @unique
+  description    String?
+  discount       Float
+  isActive       Boolean        @default(true)
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  discountMethod DiscountMethod
+  type           DiscountType
+
+  @@map("discounts")
+}
+
+model Ticket {
+  id         Int          @id @default(autoincrement())
+  userId     Int
+  status     TicketStatus
+  seatNumber String
+  basePrice  Float
+  discountId Int?
+  total      Float
+  scheduleId Int
+  createdAt  DateTime     @default(now()) @map("created_at")
+  schedule   Schedule     @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tickets")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum RewardLevel {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+enum TransactionType {
+  EARNED
+  REDEEMED
+}
+
+enum DiscountMethod {
+  PERCENTAGE
+  FIXED
+  POINTS
+}
+
+enum DiscountType {
+  BIRTHDAY
+  SEASONAL
+  POINTS
+}
+
+enum TicketStatus {
+  SOLD
+  EXPIRED
+  REDEEMED
+  CANCELLED
+}
